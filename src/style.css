@@ -1,3 +1,16 @@
 body{
     background-color: #0C0D15 !important ;
 }
+
+form{
+    background-color: #0E1926;
+}
+.navColor{
+    background-color: #0E1926 !important;
+}
+.filesBtn{
+    border-style: dashed;
+    background-color: #0C0D15;
+    color: rgb(142, 139, 139);
+    padding: 10px;
+}
