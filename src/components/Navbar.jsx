@@ -8,7 +8,7 @@ const Navbar = ({ title, type, symbol }) => {
                 <a className='text-white'><Icon type={type} symbol={symbol}/></a>
             </div>
             <div className="col-10 d-flex justify-content-center">
-                <a className="navbar-brand">{title}</a>
+                <a className="navbar-brand m-0">{title}</a>
             </div>
             <div className='col-1'>
                 <a></a>
