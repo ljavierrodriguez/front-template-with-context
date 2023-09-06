@@ -10,9 +10,9 @@ const Home = () => {
             <img src="./public/img/logo.png" alt="" className='w-25' />
             
             <div className="col-4 d-flex flex-column justify-content-center mt-5">
-                <label for="username" className="form-label text-white">Usuario:</label>
+                <label htmlFor="username" className="form-label text-white">Usuario:</label>
                 <input type="email" className="form-control text-white" id="username"></input>
-                <label for="password" className="form-label text-white">Contraseña:</label>
+                <label htmlFor="password" className="form-label text-white">Contraseña:</label>
                 <input type="email" className="form-control text-white" id="password"></input>
                 <p className='text-center mb-5 text-white'>¿Has olvidado tu contraseña?</p>
             </div>
