@@ -4,6 +4,7 @@ import injectContext from './store/AppContext';
 import Home from './pages/Home';
 import Register from './pages/Register';
 import Post from './pages/Post';
+import LoanForm from './pages/LoanForm';
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
             <Route path="/post" element={<Post />} />
+            <Route path="/loan-form" element={<LoanForm />} />
         </Routes>
     </BrowserRouter>
   )
