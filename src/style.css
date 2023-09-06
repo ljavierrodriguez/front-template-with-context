@@ -1,16 +1,57 @@
-body{
-    background-color: #0C0D15 !important ;
+body {
+    background-color: #0C0D15 !important;
 }
 
-form{
+form {
     background-color: #0E1926;
 }
-.navColor{
-    background-color: #0E1926 !important;
+
+.navColor {
+    background-color: #0C0D15 !important;
 }
-.filesBtn{
+
+.filesBtn {
     border-style: dashed;
     background-color: #0C0D15;
     color: rgb(142, 139, 139);
     padding: 10px;
+}
+
+.postWrapper {
+    background-color: #0E1926;
+    border-radius: 50px 50px 0px 0px;
+
+}
+
+.userDiv {
+    background-color: #0C0D15;
+    border-radius: 0px 0px 10px 10px;
+    padding: 10px;
+}
+
+.post_details_spn {
+    padding: 5px;
+    background-color: #0C0D15;
+    font-size: 10px;
+}
+
+.btn_post_choices {
+    background-color: #0C0D15;
+    border: none;
+}
+
+.btn_post_choices_wrapper {
+    background-color: #0C0D15;
+}
+
+.post_requirements {
+    background-color: #0E1926;
+}
+
+.post_conditions {
+    background-color: #0E1926;
+    padding: 80px 0px 80px 30px;
+}
+.post_footer{
+    background-color: #0E1926;
 }

@@ -1,8 +1,9 @@
-import React from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import injectContext from './store/AppContext'
-import Home from './pages/Home'
-import Register from './pages/Register'
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import injectContext from './store/AppContext';
+import Home from './pages/Home';
+import Register from './pages/Register';
+import Post from './pages/Post';
 
 const App = () => {
   return (
@@ -10,6 +11,7 @@ const App = () => {
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/post" element={<Post />} />
         </Routes>
     </BrowserRouter>
   )
