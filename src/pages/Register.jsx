@@ -53,7 +53,7 @@ const Register = () => {
                         <button className='filesBtn rounded w-75' id='dicomFile'><Icon type={'solid'} symbol={'cloud-arrow-up'} /><br />Format PDF <br /> <span className='text-primary'>Browse files</span></button>
                     </div>
                 </div>
-                <button type="submit" className="btn btn-primary">Registrarme</button>
+                <button type="submit" className="btn btn-primary py-2">Registrarme</button>
                 <div id="emailHelp" className="form-text text-white">Al hacer click en "Registrarme", aceptas nuestras <span className='text-primary'>condiciones</span> y <span className='text-primary'>políticas de privacidad</span>.</div>
             </form>
         </div>
