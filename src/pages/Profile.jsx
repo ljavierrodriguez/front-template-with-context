@@ -58,6 +58,11 @@ const Profile = () => {
                         <br />
                         <span className='text-secondary'>#00 0000 000000</span>
                     </div>
+
+                    <div className='mt-4'>
+                        <button className='w-50 text-primary p-0 m-0 fs-4 border border-0 rounded btn_post_choices_wrapper'><Icon type={'solid'} symbol={'file-invoice'}/><br/><span className='fs-6 p-0 m-0'>Propuestas</span></button>
+                        <button className='w-50 text-primary p-0 m-0 fs-4 border border-0 rounded btn_post_choices_wrapper'><Icon type={'solid'} symbol={'user'}/><br/><span className='fs-6 p-0 m-0'>Perfil</span></button>
+                    </div>
                 </div>
             </div>
         </>
