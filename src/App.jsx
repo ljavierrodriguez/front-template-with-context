@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import Post from './pages/Post';
 import LoanForm from './pages/LoanForm';
 import Notification from './pages/Notification';
+import Profile from './pages/Profile';
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
             <Route path="/post" element={<Post />} />
             <Route path="/loan-form" element={<LoanForm />} />
             <Route path="/notification" element={<Notification />} />
+            <Route path="/profile" element={<Profile />} />
         </Routes>
     </BrowserRouter>
   )
