@@ -5,6 +5,7 @@ import Home from './pages/Home';
 import Register from './pages/Register';
 import Post from './pages/Post';
 import LoanForm from './pages/LoanForm';
+import Notification from './pages/Notification';
 
 const App = () => {
   return (
@@ -14,6 +15,7 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/post" element={<Post />} />
             <Route path="/loan-form" element={<LoanForm />} />
+            <Route path="/notification" element={<Notification />} />
         </Routes>
     </BrowserRouter>
   )
