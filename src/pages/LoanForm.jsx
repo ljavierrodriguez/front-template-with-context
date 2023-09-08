@@ -1,7 +1,14 @@
-import React from 'react'
-import Navbar from '../components/Navbar'
+import React, {useState} from 'react';
+import Navbar from '../components/Navbar';
 
 const LoanForm = () => {
+
+    const [loanAmount, setLoanAmount] = useState('');
+    const [interest, setInterest] = useState('');
+    const [payments, setPayments] = useState('');
+    const [paymentperiod, setPaymentPeriod] = useState('');
+    const [comments, setComments] = useState('');
+
     return (
         <>
             <Navbar title={'Nueva publicación'} />
@@ -9,19 +16,19 @@ const LoanForm = () => {
                 <form className='p-3 rounded col-10 mt-3'>
                     <div className="mb-3">
                         <label htmlFor="loanAmount" className="form-label text-white">Monto del crédito<span className='text-danger'>*</span></label>
-                        <input type="email" className="form-control" id="loanAmount" />
+                        <input type="email" className="form-control" id="loanAmount" onChange={(e) => {setLoanAmount(e.target.value)}} />
                     </div>
                     <div className="mb-3">
                         <label htmlFor="interest" className="form-label text-white">Taza de interés<span className='text-danger'>*</span></label>
-                        <input type="password" className="form-control" id="interest" />
+                        <input type="password" className="form-control" id="interest" onChange={(e) => {setInterest(e.target.value)}} />
                     </div>
                     <div className="mb-3">
                         <label htmlFor="payments" className="form-label text-white">Cantidad de cuotas<span className='text-danger'>*</span></label>
-                        <input type="password" className="form-control" id="payments" />
+                        <input type="password" className="form-control" id="payments" onChange={(e) => {setPayments(e.target.value)}} />
                     </div>
                     <div className="mb-3">
                         <label htmlFor="payment_periods" className="form-label text-white">Tipo de pago<span className='text-danger'>*</span></label>
-                        <select class="form-select" id='payment_periods'>
+                        <select class="form-select" id='payment_periods' onChange={(e) => {setPaymentPeriod(e.target.value)}}>
                             <option selected>Seleccione</option>
                             <option value="1">Semanal</option>
                             <option value="2">Mensual</option>
@@ -29,7 +36,7 @@ const LoanForm = () => {
                     </div>
                     <div class="mb-3">
                         <label for="comments" class="form-label text-white">Comentarios<span className='text-danger'>*</span></label>
-                        <textarea class="form-control" id="comments" rows="3"></textarea>
+                        <textarea class="form-control" id="comments" rows="3" onChange={(e) => {setComments(e.target.value)}}></textarea>
                     </div>
 
                     <div className='d-flex justify-content-around'>
