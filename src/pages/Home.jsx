@@ -1,8 +1,10 @@
-import React, { useContext } from 'react'
-import { Context } from '../store/AppContext'
+import React, { useContext } from 'react';
+import { Context } from '../store/AppContext';
+import { useForm } from "react-hook-form";
 
 const Home = () => {
     const { store, actions } = useContext(Context);
+    const { register, handleSubmit, formState: { errors } } = useForm();
 
     return (
         <div className='container-fluid p-0'>
@@ -24,16 +26,18 @@ const Home = () => {
                     </div>
                 </div>
                 <div className='col-12 col-md-5 d-flex align-items-center'>
-                    <div className="offset-2 offset-md-1 col-8 col-md-10 col-lg-8 offset-lg-2 mt-4 mb-3 mt-md-0 mb-md-4 mr-md-0 ml-md-0">
+                    <form className="offset-2 offset-md-1 col-8 col-md-10 col-lg-8 offset-lg-2 mt-4 mb-3 mt-md-0 mb-md-4 mr-md-0 ml-md-0" onSubmit={handleSubmit((data) => {console.log(data)})}>
                         <label htmlFor="username" className="form-label text-white">Usuario:</label>
-                        <input type="email" className="form-control text-white" id="username"></input>
+                        <input type="email" {...register("username", {required: 'Debe ingresar su nombre de usuario'})} className="form-control" id="username"></input>
+                        <p className='text-danger'>{errors.username?.message}</p>
                         <label htmlFor="password" className="form-label text-white">Contraseña:</label>
-                        <input type="email" className="form-control text-white" id="password"></input>
+                        <input type="password" {...register("password", {required: 'Debe ingresar su contraseña'})} className="form-control" id="password"></input>
+                        <p className='text-danger'>{errors.password?.message}</p>
                         <p className='text-center mb-2 text-white'>¿Has olvidado tu contraseña?</p>
                         <button type="button" className="btn btn-primary mb-2 w-100 ">Iniciar Sesión</button>
-                        <button type="button" className="btn btn-secondary mb-2 w-100">Crear nueva cuenta</button>
+                        <button type="submit" className="btn btn-secondary mb-2 w-100">Crear nueva cuenta</button>
                         <button type="button" className="btn btn-light mb-2 w-100"><span><img src="./public/img/logogoogle.png" height={"30px"} /></span>Iniciar sesión con Google</button>
-                    </div>
+                    </form>
                 </div>
 
 
