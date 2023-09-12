@@ -10,13 +10,13 @@ const injectContext = PassedComponent => {
             getStore: () => state.store,
             getActions: () => state.actions,
             setStore: updateStore => setState({
-                store: Objec.assign(state.store, updateStore),
+                store: Object.assign(state.store, updateStore),
                 actions: { ...state.actions }
             })
         }))
 
         useEffect(() => {
-            // here execute functions when load webpage 
+            // here execute functions when load webpage
         }, [])
 
 
