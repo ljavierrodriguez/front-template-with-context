@@ -8,6 +8,8 @@ import LoanForm from './pages/LoanForm';
 import Notification from './pages/Notification';
 import Profile from './pages/Profile';
 import Proposal from './pages/Proposal';
+import Wall from './pages/Wall';
+import Publications from './pages/Publications';
 
 const App = () => {
   return (
@@ -20,6 +22,8 @@ const App = () => {
             <Route path="/notification" element={<Notification />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/proposal" element={<Proposal />} />
+            <Route path="/wall" element={<Wall />} />
+            <Route path="/publications" element={<Publications />} />
         </Routes>
     </BrowserRouter>
   )
