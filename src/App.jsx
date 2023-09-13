@@ -10,21 +10,23 @@ import Profile from './pages/Profile';
 import Proposal from './pages/Proposal';
 import Wall from './pages/Wall';
 import Publications from './pages/Publications';
+import NotificationToast from './components/NotificationToast';
 
 const App = () => {
   return (
     <BrowserRouter>
-        <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/post" element={<Post />} />
-            <Route path="/loan-form" element={<LoanForm />} />
-            <Route path="/notification" element={<Notification />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/proposal" element={<Proposal />} />
-            <Route path="/wall" element={<Wall />} />
-            <Route path="/publications" element={<Publications />} />
-        </Routes>
+      <NotificationToast />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/post" element={<Post />} />
+        <Route path="/loan-form" element={<LoanForm />} />
+        <Route path="/notification" element={<Notification />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/proposal" element={<Proposal />} />
+        <Route path="/wall" element={<Wall />} />
+        <Route path="/publications" element={<Publications />} />
+      </Routes>
     </BrowserRouter>
   )
 }

@@ -41,7 +41,9 @@ const sendAPI = async (method, contentType, body, addToUri) => {
 
         const response = await fetch(url, fetchOptions);
         if (!response.ok) {
-            return (`Error: Request failed with status: ${response.status}`);
+            const errorResponseData = await response.json();
+            const errorMessage = JSON.stringify(errorResponseData);
+            return (`Error: Request failed with status: ${response.status}. ${errorMessage}`);
         }
 
         const responseData = await response.json();
