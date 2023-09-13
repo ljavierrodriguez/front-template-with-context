@@ -6,8 +6,13 @@ const getState = ({ getStore, getActions, setStore }) => {
             bancoOptions: [],
             accountTypeOptions: [],
             notifications: [],
+            loading: false
         },
         actions: {
+
+            setLoading: (operation) => {
+                setStore({loading: operation})
+            }, 
 
             setNotificationTrigger: (trigger) => {
 				const notificationStore = getStore().notification;
@@ -35,7 +40,9 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 
             registerUser: async (form_data) => {
+                getActions().setLoading(true);
                 const apiResponse = await registerUser(form_data);
+                getActions().setLoading(false);
                 if (getActions().valiateApiResponse(apiResponse, "Success, registration successfull")) {
                     return true;
                 }

@@ -11,10 +11,12 @@ import Proposal from './pages/Proposal';
 import Wall from './pages/Wall';
 import Publications from './pages/Publications';
 import NotificationToast from './components/NotificationToast';
+import Loading from './components/loading';
 
 const App = () => {
   return (
     <BrowserRouter>
+      <Loading />
       <NotificationToast />
       <Routes>
         <Route path="/" element={<Home />} />
