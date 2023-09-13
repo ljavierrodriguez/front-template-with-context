@@ -1,4 +1,4 @@
-import { BASE_URL, getBancoOptions, getAccountTypeOptions } from '../api/fundMateApi.js';
+import { BASE_URL, registerUser, getBancoOptions, getAccountTypeOptions } from '../api/fundMateApi.js';
 
 const getState = ({ getStore, getActions, setStore }) => {
     return {
@@ -7,9 +7,12 @@ const getState = ({ getStore, getActions, setStore }) => {
             accountTypeOptions: [],
         },
         actions: {
-            greetings: () => {
-                const store = getStore();
-                console.log(store.name)
+
+            registerUser: async (form_data) => {
+                const apiResponse = await registerUser(form_data);
+                if (getActions().valiateApiResponse(apiResponse, "Success, registration successfull")) {
+                    return;
+                }
             },
 
             getBancoOptions: async () => {
