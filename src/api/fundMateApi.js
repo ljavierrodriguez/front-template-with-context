@@ -6,20 +6,37 @@ const sendAPI = async (method, contentType, body, addToUri) => {
 
         let url = BASE_URL;
 
-        if (addToUri){
+        if (addToUri) {
             url = BASE_URL + addToUri;
         }
 
-        const fetchOptions = {
-            method: method,
-            headers: {
-                "Content-Type": contentType
-            }
-        };
-        
-        if (method !== "GET" && body !== undefined && body !== null) {
+        let fetchOptions = null
+
+        if (contentType === null) {
+            fetchOptions = {
+                method: method,
+            };
+        }
+
+        else {
+            fetchOptions = {
+                method: method,
+                headers: {
+                    "Content-Type": contentType
+                }
+            };
+        }
+
+        if (method !== "GET" && body !== undefined && body !== null && !(body instanceof FormData)) {
             console.log('setting body..');
             fetchOptions.body = JSON.stringify(body);
+        }
+
+        else if (body instanceof FormData) {
+            fetchOptions.body = body;
+            for (const [key, value] of fetchOptions.body.entries()) {
+                console.log(`Key: ${key}, Value: ${value}`);
+            }
         }
 
         const response = await fetch(url, fetchOptions);
@@ -31,9 +48,13 @@ const sendAPI = async (method, contentType, body, addToUri) => {
         return responseData;
     }
 
-    catch (error){
+    catch (error) {
         return (`Error: ${error.message}`);
     }
+}
+
+export const registerUser = async (form_data) => {
+    return sendAPI("POST", null, form_data, "user/register");
 }
 
 export const getBancoOptions = async () => {

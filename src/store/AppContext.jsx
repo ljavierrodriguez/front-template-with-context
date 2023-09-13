@@ -17,6 +17,8 @@ const injectContext = PassedComponent => {
 
         useEffect(() => {
             // here execute functions when load webpage
+            state.actions.getBancoOptions();
+            state.actions.getAccountTypeOptions();
         }, [])
 
 
