@@ -79,11 +79,6 @@ const Register = () => {
         formData.append('identityFile', identityFileAsFile);
         formData.append('dicomFile', dicomFileAsFile);
         actions.registerUser(formData);
-
-        formData.append('loginRequest', JSON.stringify(data))
-        formData.append('identityFile', identityFileAsFile);
-        formData.append('dicomFile', dicomFileAsFile);
-        actions.registerUser(formData);
     }
 
     return (
