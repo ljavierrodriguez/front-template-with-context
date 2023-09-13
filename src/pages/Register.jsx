@@ -19,24 +19,46 @@ const Register = () => {
     const [accountNumber, setAccountNumber] = useState('');
     const [identityFile, setIdentityFile] = useState('');
     const [dicomFile, setDicomFile] = useState('');
+    const [identityFileError, setIdentityFileError] = useState('');
+    const [dicomFileError, setDicomFileError] = useState('');
 
     const handleFileDrop = (acceptedFiles, fileReference) => {
+        // Reset errors if a file is dropped
+        setIdentityFileError('');
+        setDicomFileError('');
 
         if (acceptedFiles.length < 1) {
-            return
+            // Handle no files error
+            if (fileReference === "Cédula de identidad") {
+                setIdentityFileError('Cédula de identidad is required');
+            } else if (fileReference === "Informe Dicom") {
+                setDicomFileError('Informe Dicom is required');
+            }
+            return;
         }
 
-        console.log("Received files:", acceptedFiles);
         if (fileReference === "Cédula de identidad") {
             setIdentityFile(acceptedFiles[0])
-        }
-
-        else if (fileReference === "Informe Dicom") {
+        } else if (fileReference === "Informe Dicom") {
             setDicomFile(acceptedFiles[0])
         }
     };
 
     const handleFormSubmit = async (data) => {
+
+        // Check if there are file validation errors
+        if (!identityFile || !dicomFile) {
+            if (!identityFile){
+                setIdentityFileError('Cédula de identidad is required');
+            }
+
+            if (!dicomFile){
+                setDicomFileError('Informe Dicom is required');
+            }
+
+            return;
+        }
+        
 
         // Create the identity and dicom objects
         const identity = {
@@ -94,12 +116,12 @@ const Register = () => {
                         <div className="mb-3">
                             <label htmlFor="firstName" className="form-label text-white">Primer Nombre<span className='text-danger'>*</span></label>
                             <input type="text" {...register("firstName", { required: 'Su nombre es requerido' })} className="form-control" id="firstName" onChange={(e) => { setFirstName(e.target.value) }} />
-                            <p className='text-danger'>{errors.fullname?.message}</p>
+                            <p className='text-danger'>{errors.firstName?.message}</p>
                         </div>
                         <div className="mb-3">
                             <label htmlFor="lastName" className="form-label text-white">Apellidos<span className='text-danger'>*</span></label>
                             <input type="text" {...register("lastName", { required: 'Su nombre es requerido' })} className="form-control" id="lastName" onChange={(e) => { setlastName(e.target.value) }} />
-                            <p className='text-danger'>{errors.fullname?.message}</p>
+                            <p className='text-danger'>{errors.lastName?.message}</p>
                         </div>
                         <div className="mb-3">
                             <label htmlFor="username" className="form-label text-white">Nombre de usuario<span className='text-danger'>*</span></label>
@@ -130,12 +152,6 @@ const Register = () => {
                                         {option.bankName}
                                     </option>
                                 ))}
-                                {/* <option value="bancoEstado">Banco Estado</option>
-                                <option value="itau">Itaú</option>
-                                <option value="falabella">Falabella</option>
-                                <option value="santander">Santander</option>
-                                <option value="bancoDeChile">Banco de Chile</option>
-                                <option value="scotiabank">Scotiabank</option> */}
                             </select>
                             <p className='text-danger'>{errors.bank?.message}</p>
                         </div>
@@ -148,9 +164,6 @@ const Register = () => {
                                         {option.accountName}
                                     </option>
                                 ))}
-                                {/* <option value="vistaAccount">Cuenta vista</option>
-                                <option value="currentAccount">Corriente</option>
-                                <option value="savingsAccount">Ahorro</option> */}
                             </select>
                             <p className='text-danger'>{errors.account?.message}</p>
                         </div>
@@ -163,11 +176,13 @@ const Register = () => {
                         <div className="mb-3">
                             <label htmlFor="idFile" className="form-label text-white">Cédula de identidad<span className='text-danger'>*</span></label>
                             <DropzoneFileUploader onFileDrop={handleFileDrop} fileReference={"Cédula de identidad"} />
+                            <p className='text-danger'>{identityFileError}</p>
                         </div>
 
                         <div className='mb-3'>
                             <label htmlFor="dicomFile" className="form-label text-white">Informe Dicom<span className='text-danger'>*</span></label>
                             <DropzoneFileUploader onFileDrop={handleFileDrop} fileReference={"Informe Dicom"} />
+                            <p className='text-danger'>{dicomFileError}</p>
                         </div>
                         <button type="submit" className="btn btn-primary py-2">Registrarme</button>
                         <div id="emailHelp" className="form-text text-white">Al hacer click en "Registrarme", aceptas nuestras <span className='text-primary'>condiciones</span> y <span className='text-primary'>políticas de privacidad</span>.</div>
