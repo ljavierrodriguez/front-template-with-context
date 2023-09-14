@@ -10,34 +10,20 @@ const sendAPI = async (method, contentType, authHeader, body, addToUri) => {
             url = BASE_URL + addToUri;
         }
 
-        let fetchOptions = null
+        const headers = {};
 
-        if (contentType === null) {
-            fetchOptions = {
-                method: method,
-            };
+        if (contentType !== null) {
+          headers["Content-Type"] = contentType;
         }
-
-        else {
-            if (authHeader){
-                fetchOptions = {
-                    method: method,
-                    headers: {
-                        "Content-Type": contentType,
-                        "Authorization": authHeader
-                    }
-                };
-            }
-
-            else{
-                fetchOptions = {
-                    method: method,
-                    headers: {
-                        "Content-Type": contentType
-                    }
-                };
-            }
+        
+        if (authHeader) {
+          headers["Authorization"] = authHeader;
         }
+        
+        const fetchOptions = {
+          method: method,
+          headers: headers,
+        };
 
         if (method !== "GET" && body !== undefined && body !== null && !(body instanceof FormData)) {
             console.log('setting body..');
@@ -75,12 +61,20 @@ export const loginUser = async (payload) => {
     return sendAPI("POST", "application/json", null, payload, "user/login");
 }
 
+export const getUser = async (authHeader, user_id) => {
+    return sendAPI("GET", "application/json", authHeader, null, "user/" + user_id)
+}
+
+export const updateProfilePicture = async (authHeader, user_id, form_data) => {
+    return sendAPI("PUT", null, authHeader, form_data, "user/" + user_id + "/profile-picture")
+}
+
 export const getLoanAdvertisements = async (authHeader) => {
     return sendAPI("GET", "application/json", authHeader, null, "loans/loan-advertisements");
 }
 
 export const getBancoOptions = async () => {
-    return sendAPI("GET", "application/json", null,  null, "admin/bank");
+    return sendAPI("GET", "application/json", null, null, "admin/bank");
 }
 
 export const getAccountTypeOptions = async () => {

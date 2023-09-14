@@ -1,4 +1,4 @@
-import { BASE_URL, registerUser, loginUser, getLoanAdvertisements, getBancoOptions, getAccountTypeOptions } from '../api/fundMateApi.js';
+import { BASE_URL, registerUser, loginUser, getUser, updateProfilePicture, getLoanAdvertisements, getBancoOptions, getAccountTypeOptions } from '../api/fundMateApi.js';
 import Cookies from 'js-cookie';
 
 const getState = ({ getStore, getActions, setStore }) => {
@@ -83,8 +83,51 @@ const getState = ({ getStore, getActions, setStore }) => {
                     //store the user response in user object
                     apiResponse.access_token = "Bearer " + apiResponse.access_token;
                     setStore({ user: apiResponse });
-                    Cookies.set('sessionToken', apiResponse.access_token, {secure: true, expires: 1 })
+                    console.log(getStore().user)
+                    Cookies.set('sessionToken', apiResponse.access_token, { secure: true, expires: 1 })
+                    Cookies.set('userID', apiResponse.user.userID);
                     return true;
+                }
+
+                else {
+                    return false;
+                }
+            },
+
+            getUser: async () => {
+                getActions().setLoading(true);
+                if (!Cookies.get('userID') || !getActions().hasAccessToken()) {
+                    getActions().setLoading(false);
+                    getActions().valiateApiResponse("Error: Failed to get user", "", true);
+                    return false;
+                }
+
+                const apiResponse = await getUser(getStore().user.access_token, Cookies.get('userID'));
+                getActions().setLoading(false);
+
+                if (getActions().valiateApiResponse(apiResponse, "Success, got user", false)) {
+                    setStore({ user: { ...getStore().user, user: apiResponse } });
+                    return true;
+                }
+
+                else {
+                    return false;
+                }
+            },
+
+            updateProfilePicture: async (form_data) => {
+                getActions().setLoading(true);
+                if (!Cookies.get('userID') || !getActions().hasAccessToken()) {
+                    getActions().setLoading(false);
+                    getActions().valiateApiResponse("Error: Failed to get user", "", true);
+                    return false;
+                }
+
+                const apiResponse = await updateProfilePicture(getStore().user.access_token, Cookies.get('userID'), form_data);
+                getActions().setLoading(false);
+
+                if (getActions().valiateApiResponse(apiResponse, "Success, updated profile picture", true)) {
+                    return await getActions().getUser();
                 }
 
                 else {
@@ -95,7 +138,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             getLoanAdvertisements: async () => {
                 getActions().setLoading(true);
 
-                if (!getActions().hasAccessToken()){
+                if (!getActions().hasAccessToken()) {
                     return false;
                 }
 
@@ -139,8 +182,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                 // Check if the user object exists and has an 'access_token' property
                 if (getStore().user && getStore().user.access_token) {
                     return true;
-                } 
-                
+                }
+
                 else {
                     // Access token not found in the user object, check cookies
                     const storedAccessToken = Cookies.get('sessionToken');
@@ -149,8 +192,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                         // Access token found in local storage, update the user object
                         setStore({ user: { ...getStore().user, access_token: storedAccessToken } });
                         return true;
-                    } 
-                    
+                    }
+
                     else {
                         // Neither user object nor local storage contains an access token
                         return false;

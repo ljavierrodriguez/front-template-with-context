@@ -19,6 +19,7 @@ const Wall = () => {
 
 
     return (
+        
         <div className='container-fluid'>
             <div className='d-md-none'>
                 <Navbar />
