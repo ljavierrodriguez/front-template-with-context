@@ -1,6 +1,6 @@
 import React from 'react';
 import Icon from '../components/Icon';
-function PublicationsCard() {
+function PublicationsCard({lendersName,username, loanAmount, negotiable }) {
     return (
         <>
             <div className='container bg-dark pb-2 mb-4 rounded'>
@@ -10,17 +10,17 @@ function PublicationsCard() {
                     </div>
                     <div className='col-9'>
                         <div className='d-flex justify-content-between'>
-                            <span className='text-primary text-opacity-50 fs-6'>ljavierrodriguez</span>
-                            <span className='text-primary fw-bold '>$250.000</span>
+                            <span className='text-primary text-opacity-50 fs-6'>{username}</span>
+                            <span className='text-primary fw-bold '>{loanAmount}</span>
                         </div>
-                        <h5 className='text-white'>Luis Rodríguez</h5>
+                        <h5 className='text-white'>{lendersName}</h5>
                         <p className='textcardlocation text-secondary pt-2'> <Icon type={'solid'} symbol={'location-dot'} /> Santiago,Chile </p>
 
                     </div>
                 </div>
                 <div className='d-flex justify-content-around'>
                     <div className=''>
-                        <span className='textcard text-primary text-opacity-50 bg-black m-1 rounded px-1'>Negociable</span>
+                        <span className='textcard text-primary text-opacity-50 bg-black m-1 rounded px-1'>{negotiable}</span>
                         <span className='textcard text-primary text-opacity-75 bg-black m-1 rounded px-1'>1 Transacción</span>
                     </div>
                     <div className=''>
