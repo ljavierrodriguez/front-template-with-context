@@ -21,20 +21,32 @@ const App = () => {
         <Loading />
         <NotificationToast />
         <Routes>
+          {/* public routes */}
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Home />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/post" element={<Post />} />
-          <Route path="/loan-form" element={<LoanForm />} />
           <Route path="/notification" element={<Notification />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/proposal" element={<Proposal />} />
-          <Route path="/publications" element={<Publications />} />
           <Route path="*" element={<h1>Not found!</h1>} />
 
+          {/* private routes */}
           <Route path="/wall" element={<PrivateRoute />}>
             <Route path="/wall" element={<Wall />} />
+          </Route>
+          <Route path="/profile" element={<PrivateRoute />}>
+            <Route path="/profile" element={<Profile />} />
+          </Route>
+          <Route path="/proposal" element={<PrivateRoute />}>
+            <Route path="/proposal" element={<Proposal />} />
+          </Route>
+          <Route path="/publications" element={<PrivateRoute />}>
+            <Route path="/publications" element={<Publications />} />
+          </Route>
+          <Route path="/post" element={<PrivateRoute />}>
+            <Route path="/post" element={<Post />} />
+          </Route>
+          <Route path="/loan-form" element={<PrivateRoute />}>
+            <Route path="/loan-form" element={<LoanForm />} />
           </Route>
         </Routes>
       </Fragment>
