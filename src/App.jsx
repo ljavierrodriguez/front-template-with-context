@@ -16,19 +16,22 @@ import Loading from './components/loading';
 const App = () => {
   return (
     <BrowserRouter>
-      <Loading />
-      <NotificationToast />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/post" element={<Post />} />
-        <Route path="/loan-form" element={<LoanForm />} />
-        <Route path="/notification" element={<Notification />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/proposal" element={<Proposal />} />
-        <Route path="/wall" element={<Wall />} />
-        <Route path="/publications" element={<Publications />} />
-      </Routes>
+        <Loading />
+        <NotificationToast />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/login" element={<Home />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/post" element={<Post />} />
+          <Route path="/loan-form" element={<LoanForm />} />
+          <Route path="/notification" element={<Notification />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/proposal" element={<Proposal />} />
+          <Route path="/wall" element={<Wall />} />
+          <Route path="/publications" element={<Publications />} />
+          <Route path="*" element={<h1>Not found!</h1>} />
+        </Routes>
     </BrowserRouter>
   )
 }

@@ -1,11 +1,23 @@
-import React from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import Icon from '../components/Icon';
 import PublicationsCard from '../components/PublicationsCard';
 import Navbar from '../components/Navbar';
 import NavbarVertical from '../components/NavbarVertical';
 import SearchBar from '../components/SearchBar';
 import TopBar from '../components/TopBar';
-function Wall() {
+import { Context } from '../store/AppContext';
+
+const Wall = () => {
+
+    const { store, actions } = useContext(Context);
+    const [loanAdvertisments, SetLoanAdvertisements] = useState(null)
+
+    //get the loan advertisements
+    useEffect( () => {
+        SetLoanAdvertisements(actions.getLoanAdvertisements());
+    }, []);
+
+
     return (
         <div className='container-fluid'>
             <div className='d-md-none'>

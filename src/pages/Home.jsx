@@ -1,10 +1,31 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Context } from '../store/AppContext';
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
     const { store, actions } = useContext(Context);
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const navigate = useNavigate();
+    // const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit: reactHookFormSubmit, formState: { errors } } = useForm();
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+
+    //could do this with either form data or state
+    const handleLogin = async () => {
+
+        // Create the final payload
+        const payload = {
+            username: username,
+            password: password,
+        };
+
+        const loginResult = await actions.logInUser(payload);
+
+        if (loginResult) {
+            navigate('/wall');
+        }
+    }
 
     return (
         <div className='container-fluid p-0'>
@@ -12,8 +33,8 @@ const Home = () => {
                 <img src="./public/img/wave.png" alt="" className='w-100' height={'60px'} />
             </div>
 
-            <div className='row'>
-                <div className='col-12 col-md-6 offset-md-1'>
+            <div className='row w-100'>
+                <div className='col-12 col-md-6 p-3'>
                     <div className=' offset-4 col-4 col-md-7 offset-md-2 mt-4 mb-2'>
                         <img src="./public/img/logo.png" alt="" className='img-fluid' />
                     </div>
@@ -25,25 +46,33 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
-                <div className='col-12 col-md-5 d-flex align-items-center'>
-                    <form className="offset-2 offset-md-1 col-8 col-md-10 col-lg-8 offset-lg-2 mt-4 mb-3 mt-md-0 mb-md-4 mr-md-0 ml-md-0" onSubmit={handleSubmit((data) => {console.log(data)})}>
-                        <label htmlFor="username" className="form-label text-white">Usuario:</label>
-                        <input type="email" {...register("username", {required: 'Debe ingresar su nombre de usuario'})} className="form-control" id="username"></input>
-                        <p className='text-danger'>{errors.username?.message}</p>
-                        <label htmlFor="password" className="form-label text-white">Contraseña:</label>
-                        <input type="password" {...register("password", {required: 'Debe ingresar su contraseña'})} className="form-control" id="password"></input>
-                        <p className='text-danger'>{errors.password?.message}</p>
-                        <p className='text-center mb-2 text-white'>¿Has olvidado tu contraseña?</p>
-                        <button type="button" className="btn btn-primary mb-2 w-100 ">Iniciar Sesión</button>
-                        <button type="submit" className="btn btn-secondary mb-2 w-100">Crear nueva cuenta</button>
-                        <button type="button" className="btn btn-light mb-2 w-100"><span><img src="./public/img/logogoogle.png" height={"30px"} /></span>Iniciar sesión con Google</button>
-                    </form>
+                <div className='col-12 col-md-6 align-items-center justify-content-center p-3'>
+                    <div className="row m-0" style={{height: "65%"}}>
+                        {/* Login Form */}
+                        <div className="col-12 col-md-10 d-flex flex-column align-items-center justify-content-center pt-2 pb-2 ps-5 pe-5 p-md-0">
+                            <form className="w-100" onSubmit={reactHookFormSubmit(handleLogin)}>
+                                <label htmlFor="username" className="form-label text-white">Usuario:</label>
+                                <input type="text" {...register("username", { required: 'Debe ingresar su nombre de usuario' })} className="form-control" id="username" onChange={(e) => setUsername(e.target.value)}></input>
+                                <p className='text-danger'>{errors.username?.message}</p>
+                                <label htmlFor="password" className="form-label text-white">Contraseña:</label>
+                                <input type="password" {...register("password", { required: 'Debe ingresar su contraseña' })} className="form-control" id="password" onChange={(e) => setPassword(e.target.value)}></input>
+                                <p className='text-danger'>{errors.password?.message}</p>
+                                <p className='text-center mb-2 text-white'>¿Has olvidado tu contraseña?</p>
+                                <button type="submit" className="btn btn-primary mb-2 w-100">Iniciar Sesión</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div className="row m-0" style={{height: "35%"}}>
+                        {/* Buttons */}
+                        <div className="col-12 col-md-10 d-flex flex-column align-items-center justify-content-center pt-2 pb-5 ps-5 pe-5 p-md-0">
+                            <button type="submit" className="btn btn-secondary mb-2 w-100" onClick={() => navigate('/register')}>Crear nueva cuenta</button>
+                            <button type="button" className="btn btn-light mb-2 w-100"><span><img src="./public/img/logogoogle.png" height={"30px"} /></span>Iniciar sesión con Google</button>
+                        </div>
+                    </div>
                 </div>
-
-
             </div>
 
-            <footer className='container-fluid bg-primary text-center'>
+            <footer className='container-fluid bg-primary text-center p-2'>
                 <p className='m-0 fs-6'>Copyright © Jermain Chacón, Ryan Daniels y Genesis Longart</p>
             </footer>
 

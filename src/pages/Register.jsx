@@ -3,10 +3,11 @@ import { Context } from "../store/AppContext";
 import Navbar from '../components/Navbar';
 import DropzoneFileUploader from '../components/DropzoneFileUploader';
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+
 const Register = () => {
-
     const { store, actions } = useContext(Context);
-
+    const navigate = useNavigate();
     const { register, handleSubmit: reactHookFormSubmit, formState: { errors } } = useForm();
     const [firstName, setFirstName] = useState('');
     const [lastName, setlastName] = useState('');
@@ -100,7 +101,13 @@ const Register = () => {
         formData.append('loginRequest', JSON.stringify(payload));
         formData.append('identityFile', identityFileAsFile);
         formData.append('dicomFile', dicomFileAsFile);
-        actions.registerUser(formData);
+
+        const registrationResult = await actions.registerUser(formData);
+
+        if (registrationResult) {
+            actions.setNotificationPage("Registration Successful", "Back to Login", "/");
+            navigate('/notification');
+        }
     }
 
     return (

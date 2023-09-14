@@ -1,6 +1,6 @@
 export const BASE_URL = "https://fundmate.onrender.com/"
 
-const sendAPI = async (method, contentType, body, addToUri) => {
+const sendAPI = async (method, contentType, authHeader, body, addToUri) => {
 
     try {
 
@@ -19,12 +19,24 @@ const sendAPI = async (method, contentType, body, addToUri) => {
         }
 
         else {
-            fetchOptions = {
-                method: method,
-                headers: {
-                    "Content-Type": contentType
-                }
-            };
+            if (authHeader){
+                fetchOptions = {
+                    method: method,
+                    headers: {
+                        "Content-Type": contentType,
+                        "Authorization": authHeader
+                    }
+                };
+            }
+
+            else{
+                fetchOptions = {
+                    method: method,
+                    headers: {
+                        "Content-Type": contentType
+                    }
+                };
+            }
         }
 
         if (method !== "GET" && body !== undefined && body !== null && !(body instanceof FormData)) {
@@ -56,13 +68,21 @@ const sendAPI = async (method, contentType, body, addToUri) => {
 }
 
 export const registerUser = async (form_data) => {
-    return sendAPI("POST", null, form_data, "user/register");
+    return sendAPI("POST", null, null, form_data, "user/register");
+}
+
+export const loginUser = async (payload) => {
+    return sendAPI("POST", "application/json", null, payload, "user/login");
+}
+
+export const getLoanAdvertisements = async (authHeader) => {
+    return sendAPI("GET", "application/json", authHeader, null, "loans/loan-advertisements");
 }
 
 export const getBancoOptions = async () => {
-    return sendAPI("GET", "application/json", null, "admin/bank");
+    return sendAPI("GET", "application/json", null,  null, "admin/bank");
 }
 
 export const getAccountTypeOptions = async () => {
-    return sendAPI("GET", "application/json", null, "admin/account-type");
+    return sendAPI("GET", "application/json", null, null, "admin/account-type");
 }
