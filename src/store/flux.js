@@ -1,4 +1,5 @@
 import { BASE_URL, registerUser, loginUser, getLoanAdvertisements, getBancoOptions, getAccountTypeOptions } from '../api/fundMateApi.js';
+import Cookies from 'js-cookie';
 
 const getState = ({ getStore, getActions, setStore }) => {
     return {
@@ -82,7 +83,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                     //store the user response in user object
                     apiResponse.access_token = "Bearer " + apiResponse.access_token;
                     setStore({ user: apiResponse });
-                    getActions().saveToLocalStorage('access_token', apiResponse.access_token);
+                    Cookies.set('sessionToken', apiResponse.access_token, {secure: true, expires: 1 })
                     return true;
                 }
 
@@ -93,21 +94,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             getLoanAdvertisements: async () => {
                 getActions().setLoading(true);
-                let access_token_temp = null;
 
-                if (getStore().user){
-                    access_token_temp = getStore().user.access_token;
-                }
-
-                access_token_temp =  getActions().getLocalStorageItem('access_token');
-
-                if (access_token_temp === null || access_token_temp === undefined){
-                    getActions().setLoading(false);
-                    getActions().valiateApiResponse("Error", "Require Access Token, please re-login", true)
+                if (!getActions().hasAccessToken()){
                     return false;
                 }
 
-                const apiResponse = await getLoanAdvertisements(access_token_temp);
+                const apiResponse = await getLoanAdvertisements(getStore().user.access_token);
                 getActions().setLoading(false);
 
                 if (getActions().valiateApiResponse(apiResponse, "Success, fetched loan advertisements successfully", false)) {
@@ -136,12 +128,35 @@ const getState = ({ getStore, getActions, setStore }) => {
             },
 
             getLocalStorageItem: (fileName) => {
-				return JSON.parse(localStorage.getItem(fileName));
-			},
+                return JSON.parse(localStorage.getItem(fileName));
+            },
 
-			saveToLocalStorage: (fileName, data) => {
-				localStorage.setItem(fileName, JSON.stringify(data));
-			},
+            saveToLocalStorage: (fileName, data) => {
+                localStorage.setItem(fileName, JSON.stringify(data));
+            },
+
+            hasAccessToken: () => {
+                // Check if the user object exists and has an 'access_token' property
+                if (getStore().user && getStore().user.access_token) {
+                    return true;
+                } 
+                
+                else {
+                    // Access token not found in the user object, check cookies
+                    const storedAccessToken = Cookies.get('sessionToken');
+
+                    if (storedAccessToken) {
+                        // Access token found in local storage, update the user object
+                        setStore({ user: { ...getStore().user, access_token: storedAccessToken } });
+                        return true;
+                    } 
+                    
+                    else {
+                        // Neither user object nor local storage contains an access token
+                        return false;
+                    }
+                }
+            },
 
             valiateApiResponse: (apiResponse, successMessage, showNotification) => {
 

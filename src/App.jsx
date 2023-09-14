@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import PrivateRoute from './utils/PrivateRoute';
 import injectContext from './store/AppContext';
 import Home from './pages/Home';
 import Register from './pages/Register';
@@ -16,6 +17,7 @@ import Loading from './components/loading';
 const App = () => {
   return (
     <BrowserRouter>
+      <Fragment>
         <Loading />
         <NotificationToast />
         <Routes>
@@ -28,10 +30,14 @@ const App = () => {
           <Route path="/notification" element={<Notification />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/proposal" element={<Proposal />} />
-          <Route path="/wall" element={<Wall />} />
           <Route path="/publications" element={<Publications />} />
           <Route path="*" element={<h1>Not found!</h1>} />
+
+          <Route path="/wall" element={<PrivateRoute />}>
+            <Route path="/wall" element={<Wall />} />
+          </Route>
         </Routes>
+      </Fragment>
     </BrowserRouter>
   )
 }
