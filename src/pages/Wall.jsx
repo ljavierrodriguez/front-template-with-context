@@ -10,11 +10,15 @@ import { Context } from '../store/AppContext';
 const Wall = () => {
 
     const { store, actions } = useContext(Context);
-    const [loanAdvertisments, SetLoanAdvertisements] = useState(null)
-
     //get the loan advertisements
-    useEffect( () => {
-        SetLoanAdvertisements(actions.getLoanAdvertisements());
+    useEffect(() => {
+
+        const handleGetLoanAdvertisements = async () => {
+            await actions.getLoanAdvertisements();
+           
+        }
+        handleGetLoanAdvertisements()
+       
     }, []);
 
 
@@ -48,8 +52,13 @@ const Wall = () => {
                 </div>
                 <div className='col-10 offset-1 col-md-8 offset-md-0 offset-lg-1 col-lg-7 d-flex flex-column align-items-center'>
                     <SearchBar />
-                    <PublicationsCard />
-                    <PublicationsCard />
+                    {
+                        store.loanAdvertisements ?
+                            store.loanAdvertisements.map((loanAdv, i) => (
+                                <PublicationsCard lendersName={loanAdv.lender.user.firstName} username={loanAdv.lender.user.username} loanAmount={loanAdv.amount} negotiable={loanAdv.negotiable} key={i}/>
+                            )) : <p className='text-white'>Sin publicaciones</p>
+
+                            }
                 </div>
             </div>
             <div className='midiv row col-12 d-md-none fixed-bottom'>

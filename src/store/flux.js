@@ -5,6 +5,7 @@ const getState = ({ getStore, getActions, setStore }) => {
     return {
         store: {
             user: null,
+            loanAdvertisements: null,
             bancoOptions: [],
             accountTypeOptions: [],
             notifications: [],
@@ -146,7 +147,8 @@ const getState = ({ getStore, getActions, setStore }) => {
                 getActions().setLoading(false);
 
                 if (getActions().valiateApiResponse(apiResponse, "Success, fetched loan advertisements successfully", false)) {
-                    return apiResponse;
+                    setStore({loanAdvertisements: apiResponse})
+                    return true;
                 }
 
                 else {
