@@ -77,6 +77,10 @@ export const getLoanAdvertisement = async(authHeader, loanAdvertisementID) => {
     return sendAPI("GET", "application/json", authHeader, null, "loans/loan-advertisements/" + loanAdvertisementID)
 }
 
+export const postLoanAdvertisement = async(authHeader, payload, lenderID) => {
+    return sendAPI("POST", "application/json", authHeader, payload, "lender/" + lenderID + "/loan-advertisment")
+}
+
 export const postLoanOffer = async(authHeader, payload, debtorID) => {
     return sendAPI("POST", "application/json", authHeader, payload, "debtor/" + debtorID + "/loan-offer")
 }

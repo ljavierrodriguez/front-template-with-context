@@ -1,14 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Navbar from '../components/Navbar';
 import TopBar from '../components/TopBar';
+import { Context } from "../store/AppContext";
+import { useForm } from "react-hook-form";
+import { useParams, useNavigate } from 'react-router-dom';
 
 const LoanForm = () => {
+    const { store, actions } = useContext(Context);
+    const navigate = useNavigate();
+    const { register, handleSubmit: reactHookFormSubmit, formState: { errors } } = useForm();
 
-    const [loanAmount, setLoanAmount] = useState('');
-    const [interest, setInterest] = useState('');
-    const [payments, setPayments] = useState('');
-    const [paymentperiod, setPaymentPeriod] = useState('');
-    const [comments, setComments] = useState('');
+    const handlePublicationPost = async (form) => {
+
+        const negociableBool = form.negotiationOption === "negotiable" ? "true" : "false";
+        
+        // Create the final payload
+        const payload = {
+            amount: form.amount,
+            createdAt: "2023-09-09",
+            updatedAt: "2023-09-09",
+            interest: form.interest,
+            dueDate: "2023-12-1",
+            paymentFrequencyID: form.paymentFrequencyID,
+            negotiable: negociableBool,
+            description: form.description,
+        };
+
+        const publicationResult = await actions.postLoanAdvertisement(payload);
+
+        if (publicationResult) {
+            navigate('/wall');
+        }
+    }
 
     return (
         <>
@@ -19,47 +42,66 @@ const LoanForm = () => {
                 <TopBar />
             </div>
 
-
             <div className='d-flex flex-column align-items-center col-md-8 offset-md-2'>
                 <h3 className='text-white'>Nueva Publicación</h3>
-                <form className='p-3 rounded col-10 mt-3'>
+                <form className='p-3 rounded col-10 mt-3' onSubmit={reactHookFormSubmit(handlePublicationPost)}>
                     <div className="mb-3">
                         <label htmlFor="loanAmount" className="form-label text-white">Monto del crédito<span className='text-danger'>*</span></label>
-                        <input type="email" className="form-control" id="loanAmount" onChange={(e) => { setLoanAmount(e.target.value) }} />
+                        <input type="text" {...register("amount", { required: 'Debes ingresar un monto de crédito' })} className="form-control" id="loanAmount" />
+                        <p className='text-danger'>{errors.amount?.message}</p>
                     </div>
                     <div className="mb-3">
                         <label htmlFor="interest" className="form-label text-white">Taza de interés<span className='text-danger'>*</span></label>
-                        <input type="password" className="form-control" id="interest" onChange={(e) => { setInterest(e.target.value) }} />
+                        <input type="text" {...register("interest", { required: 'Debe ingresar una taza de interés' })} className="form-control" id="interest" />
+                        <p className='text-danger'>{errors.interest?.message}</p>
                     </div>
-                    <div className="mb-3">
+                    {/* <div className="mb-3">
                         <label htmlFor="payments" className="form-label text-white">Cantidad de cuotas<span className='text-danger'>*</span></label>
-                        <input type="password" className="form-control" id="payments" onChange={(e) => { setPayments(e.target.value) }} />
-                    </div>
+                        <input type="password" className="form-control" id="payments"  />
+                    </div> */}
                     <div className="mb-3">
                         <label htmlFor="payment_periods" className="form-label text-white">Tipo de pago<span className='text-danger'>*</span></label>
-                        <select class="form-select" id='payment_periods' onChange={(e) => { setPaymentPeriod(e.target.value) }}>
-                            <option selected>Seleccione</option>
-                            <option value="1">Semanal</option>
-                            <option value="2">Mensual</option>
+                        <select className="form-select" {...register("paymentFrequencyID", { required: 'Seleccione un tipo de pago' })} id='payment_periods' >
+                            <option value="" disabled>Seleccione</option>
+                            {store.paymentFrequencyTypeOptions.map((option) => (
+                                <option key={option.paymentFrequencyID} value={option.paymentFrequencyID}>
+                                    {option.frequency}
+                                </option>
+                            ))}
                         </select>
+                        <p className='text-danger'>{errors.paymentType?.message}</p>
                     </div>
-                    <div class="mb-3">
-                        <label for="comments" class="form-label text-white">Comentarios<span className='text-danger'>*</span></label>
-                        <textarea class="form-control" id="comments" rows="3" onChange={(e) => { setComments(e.target.value) }}></textarea>
+                    <div className="mb-3">
+                        <label htmlFor="comments" className="form-label text-white">Comentarios<span className='text-danger'>*</span></label>
+                        <textarea {...register("description")} className="form-control" id="comments" rows="3" ></textarea>
+                        <p className='text-danger'>{errors.description?.message}</p>
                     </div>
 
                     <div className='d-flex justify-content-around'>
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="negotiable" />
-                            <label class="form-check-label  text-white" for="negotiable">Negociable</label>
+                        <div className="mb-3 form-check">
+                            <input
+                                type="radio"
+                                className="form-check-input"
+                                id="negotiable"
+                                value="negotiable"
+                                {...register("negotiationOption", { required: 'Seleccione una opción' })} // Register and require the radio button
+                            />
+                            <label className="form-check-label  text-white" htmlFor="negotiable">Negociable</label>
                         </div>
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="notNegotiable" />
-                            <label class="form-check-label  text-white" for="notNegotiable">No negociable</label>
+                        <div className="mb-3 form-check">
+                            <input
+                                type="radio"
+                                className="form-check-input"
+                                id="notNegotiable"
+                                value="notNegotiable"
+                                {...register("negotiationOption", { required: 'Seleccione una opción' })} // Register and require the radio button
+                            />
+                            <label className="form-check-label  text-white" htmlFor="notNegotiable">No negociable</label>
                         </div>
+                        <p className='text-danger'>{errors.paymentType?.negotiationOption}</p>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100 mt-2">Publicar</button>
+                    <button type="submit" className="btn btn-primary w-100 mt-2">Publicar</button>
                 </form>
             </div>
 
