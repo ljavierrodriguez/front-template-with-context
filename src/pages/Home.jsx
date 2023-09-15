@@ -30,13 +30,13 @@ const Home = () => {
     return (
         <div className='container-fluid p-0'>
             <div className='w-100 m-0'>
-                <img src="./public/img/wave.png" alt="" className='w-100' height={'60px'} />
+                <img src="/img/wave.png" alt="" className='w-100' height={'60px'} />
             </div>
 
             <div className='row w-100'>
                 <div className='col-12 col-md-6 p-3'>
                     <div className=' offset-4 col-4 col-md-7 offset-md-2 mt-4 mb-2'>
-                        <img src="./public/img/logo.png" alt="" className='img-fluid' />
+                        <img src="/img/logo.png" alt="" className='img-fluid' />
                     </div>
 
                     <div className='col-md-12 d-none d-sm-none d-md-inline mt-2 mb-2'>
@@ -66,7 +66,7 @@ const Home = () => {
                         {/* Buttons */}
                         <div className="col-12 col-md-10 d-flex flex-column align-items-center justify-content-center pt-2 pb-5 ps-5 pe-5 p-md-0">
                             <button type="submit" className="btn btn-secondary mb-2 w-100" onClick={() => navigate('/register')}>Crear nueva cuenta</button>
-                            <button type="button" className="btn btn-light mb-2 w-100"><span><img src="./public/img/logogoogle.png" height={"30px"} /></span>Iniciar sesión con Google</button>
+                            <button type="button" className="btn btn-light mb-2 w-100"><span><img src="/img/logogoogle.png" height={"30px"} /></span>Iniciar sesión con Google</button>
                         </div>
                     </div>
                 </div>
