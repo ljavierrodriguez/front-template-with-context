@@ -12,7 +12,7 @@ import Proposal from './pages/Proposal';
 import Wall from './pages/Wall';
 import Publications from './pages/Publications';
 import NotificationToast from './components/NotificationToast';
-import Loading from './components/loading';
+import Loading from './components/Loading';
 
 const App = () => {
   return (
