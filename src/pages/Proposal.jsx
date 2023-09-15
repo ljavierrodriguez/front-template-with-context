@@ -1,15 +1,42 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import { useForm } from "react-hook-form";
+import { Context } from "../store/AppContext";
+import { useParams, useNavigate } from 'react-router-dom';
 
 const Proposal = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { store, actions } = useContext(Context);
+    const navigate = useNavigate();
+    const { postId } = useParams();
+    const { register, handleSubmit: reactHookFormSubmit, formState: { errors } } = useForm();
+
+    const handlePostPropsal = async (form) => {
+
+        // Create the final payload
+        const payload = {
+            loanAdvertisementID: postId,
+            createdAt: "2023-09-09",
+            updatedAt: "2023-09-09",
+            interest: form.interest,
+            comment: form.comment,
+            dueDate: "2023-12-1",
+            paymentFrequencyID: "1",
+            offerStatusID: "1"
+        };
+
+        const proposalResult = await actions.postLoanOffer(payload);
+
+        if (proposalResult) {
+            navigate('/post/' + postId);
+        }
+    }
+
     return (
         <>
             <Navbar title={'Propuesta'} />
 
             <div className="container">
-                <form className='rounded pb-2' onSubmit={handleSubmit((data) => { console.log(data) })}>
+                <form className='rounded pb-2' onSubmit={reactHookFormSubmit(handlePostPropsal)}>
                     <div className="row">
                         <div className="col-md-6">
                             <div className="mb-3">
@@ -32,9 +59,12 @@ const Proposal = () => {
                             <div className="mb-3">
                                 <label htmlFor="paymentType" className="form-label text-white">Tipo de pago<span className='text-danger'>*</span></label>
                                 <select className="form-select" {...register("paymentType", { required: 'Seleccione un tipo de pago' })} id='paymentType'>
-                                    <option selected>Seleccione</option>
-                                    <option value="weekly">Semanal</option>
-                                    <option value="monthly">Mensual</option>
+                                    <option value="" disabled>Seleccione</option>
+                                    {store.paymentFrequencyTypeOptions.map((option) => (
+                                        <option key={option.paymentFrequencyID} value={option.paymentFrequencyID}>
+                                            {option.frequency}
+                                        </option>
+                                    ))}
                                 </select>
                                 <p className='text-danger'>{errors.paymentType?.message}</p>
                             </div>
@@ -42,7 +72,7 @@ const Proposal = () => {
                         <div className="col-md-6">
                             <div className="mb-3">
                                 <label htmlFor="comments" className="form-label text-white">Comentarios:</label>
-                                <textarea class="form-control" id="comments" rows="3"></textarea>
+                                <textarea className="form-control" id="comments" rows="3"></textarea>
                             </div>
                         </div>
                     </div>

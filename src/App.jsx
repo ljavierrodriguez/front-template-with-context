@@ -36,14 +36,14 @@ const App = () => {
           <Route path="/profile" element={<PrivateRoute />}>
             <Route path="/profile" element={<Profile />} />
           </Route>
-          <Route path="/proposal" element={<PrivateRoute />}>
-            <Route path="/proposal" element={<Proposal />} />
-          </Route>
           <Route path="/publications" element={<PrivateRoute />}>
             <Route path="/publications" element={<Publications />} />
           </Route>
           <Route path="/post" element={<PrivateRoute />}>
-            <Route path="/post" element={<Post />} />
+            <Route path="/post/:postId" element={<Post />} />
+          </Route>
+          <Route path="/post/:postId/proposal" element={<PrivateRoute />}>
+            <Route path="/post/:postId/proposal" element={<Proposal />} />
           </Route>
           <Route path="/loan-form" element={<PrivateRoute />}>
             <Route path="/loan-form" element={<LoanForm />} />

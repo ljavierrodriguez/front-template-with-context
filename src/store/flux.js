@@ -1,14 +1,17 @@
-import { BASE_URL, registerUser, loginUser, getUser, updateProfilePicture, getLoanAdvertisements, getBancoOptions, getAccountTypeOptions } from '../api/fundMateApi.js';
+import { BASE_URL, registerUser, loginUser, getUser, updateProfilePicture, getLoanAdvertisements, getLoanAdvertisement, postLoanOffer, getBancoOptions, getAccountTypeOptions, getPaymentFrequencyTypesOptions } from '../api/fundMateApi.js';
 import Cookies from 'js-cookie';
 
 const getState = ({ getStore, getActions, setStore }) => {
     return {
         store: {
             user: null,
+            loanAdvertisement: null,
             toggleUserMode: "debtor",
             loanAdvertisements: null,
+            latestLoanOffer: null,
             bancoOptions: [],
             accountTypeOptions: [],
+            paymentFrequencyTypeOptions: [],
             notifications: [],
             loading: false,
             notificationPage: {
@@ -85,9 +88,10 @@ const getState = ({ getStore, getActions, setStore }) => {
                     //store the user response in user object
                     apiResponse.access_token = "Bearer " + apiResponse.access_token;
                     setStore({ user: apiResponse });
-                    console.log(getStore().user)
+
                     Cookies.set('sessionToken', apiResponse.access_token, { secure: true, expires: 1 })
                     Cookies.set('userID', apiResponse.user.userID);
+                    getActions().saveToSessionStorage('user', apiResponse)
                     return true;
                 }
 
@@ -108,6 +112,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 getActions().setLoading(false);
 
                 if (getActions().valiateApiResponse(apiResponse, "Success, got user", false)) {
+                    getActions().saveToSessionStorage('user', apiResponse)
                     setStore({ user: { ...getStore().user, user: apiResponse } });
                     return true;
                 }
@@ -148,7 +153,53 @@ const getState = ({ getStore, getActions, setStore }) => {
                 getActions().setLoading(false);
 
                 if (getActions().valiateApiResponse(apiResponse, "Success, fetched loan advertisements successfully", false)) {
-                    setStore({ loanAdvertisements: apiResponse })
+                    setStore({loanAdvertisements: apiResponse })
+                    return true;
+                }
+
+                else {
+                    return false;
+                }
+            },
+
+            getLoanAdvertisement: async (loan_advertisement_id) => {
+                getActions().setLoading(true);
+
+                if (!getActions().hasAccessToken()) {
+                    getActions().setLoading(false);
+                    return false;
+                }
+
+                const apiResponse = await getLoanAdvertisement(getStore().user.access_token, loan_advertisement_id);
+                getActions().setLoading(false);
+
+                if (getActions().valiateApiResponse(apiResponse, "Success, fetched loan advertisement successfully", false)) {
+                    setStore({loanAdvertisement: apiResponse})
+                    return true;
+                }
+
+                else {
+                    return false;
+                }
+            },
+
+            postLoanOffer: async (payload) => {
+                getActions().setLoading(true);
+
+                if (!getActions().hasAccessToken() || !getActions().getSessionStorage('user').user.debtor.debtorID) {
+                    getActions().setLoading(false);
+                    getActions().valiateApiResponse("Error: Failed to post proposal", "", true)
+                    return false;
+                }
+
+                // get the debtor ID
+                const debtorID = getActions().getSessionStorage('user').user.debtor.debtorID;
+
+                const apiResponse = await postLoanOffer(getStore().user.access_token, payload, debtorID);
+                getActions().setLoading(false);
+
+                if (getActions().valiateApiResponse(apiResponse, "Success, posted loan proposal", true)) {
+                    setStore({latestLoanOffer: apiResponse})
                     return true;
                 }
 
@@ -171,6 +222,22 @@ const getState = ({ getStore, getActions, setStore }) => {
                     setStore({ accountTypeOptions: apiResponse });
                     return;
                 }
+            },
+
+            getPaymentFrequencyTypesOptions: async () => {
+                const apiResponse = await getPaymentFrequencyTypesOptions();
+                if (getActions().valiateApiResponse(apiResponse, "Success, payment frequency options fetched from api", false)) {
+                    setStore({ paymentFrequencyTypeOptions: apiResponse });
+                    return;
+                }
+            },
+
+            getSessionStorage: (filename) => {
+                return JSON.parse(sessionStorage.getItem(filename));
+            },
+
+            saveToSessionStorage: (filename, data) => {
+                sessionStorage.setItem(filename, JSON.stringify(data));
             },
 
             getLocalStorageItem: (fileName) => {
