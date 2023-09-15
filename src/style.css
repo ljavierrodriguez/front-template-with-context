@@ -35,9 +35,9 @@ form {
     font-size: 10px;
 }
 
-.btn_post_choices {
-    background-color: #0C0D15;
-    border: none;
+.nav-link.active {
+    background-color: #01418f !important;
+    color: rgb(199, 199, 199) !important;
 }
 
 .btn_post_choices_wrapper {

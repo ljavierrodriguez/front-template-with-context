@@ -1,4 +1,4 @@
-import { BASE_URL, registerUser, loginUser, getUser, updateProfilePicture, getLoanAdvertisements, getLoanAdvertisement, postLoanOffer, getBancoOptions, getAccountTypeOptions, getPaymentFrequencyTypesOptions } from '../api/fundMateApi.js';
+import { BASE_URL, registerUser, loginUser, getUser, updateProfilePicture, getLoanAdvertisements, getLoanAdvertisement, postLoanAdvertisement, postLoanOffer, getBancoOptions, getAccountTypeOptions, getPaymentFrequencyTypesOptions } from '../api/fundMateApi.js';
 import Cookies from 'js-cookie';
 
 const getState = ({ getStore, getActions, setStore }) => {
@@ -8,6 +8,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             loanAdvertisement: null,
             toggleUserMode: "debtor",
             loanAdvertisements: null,
+            latestLoanAdvertisement: null,
             latestLoanOffer: null,
             bancoOptions: [],
             accountTypeOptions: [],
@@ -153,7 +154,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 getActions().setLoading(false);
 
                 if (getActions().valiateApiResponse(apiResponse, "Success, fetched loan advertisements successfully", false)) {
-                    setStore({loanAdvertisements: apiResponse })
+                    setStore({ loanAdvertisements: apiResponse })
                     return true;
                 }
 
@@ -174,7 +175,33 @@ const getState = ({ getStore, getActions, setStore }) => {
                 getActions().setLoading(false);
 
                 if (getActions().valiateApiResponse(apiResponse, "Success, fetched loan advertisement successfully", false)) {
-                    setStore({loanAdvertisement: apiResponse})
+                    setStore({ loanAdvertisement: apiResponse })
+                    return true;
+                }
+
+                else {
+                    return false;
+                }
+            },
+
+            postLoanAdvertisement: async (payload) => {
+                getActions().setLoading(true);
+                const user = getActions().getSessionStorage('user');
+
+                if (!getActions().hasAccessToken() || !user.lender.lenderID) {
+                    getActions().setLoading(false);
+                    getActions().valiateApiResponse("Error: Failed to post proposal", "", true)
+                    return false;
+                }
+
+                // get the lender ID
+                const lenderID = user.lender.lenderID;
+
+                const apiResponse = await postLoanAdvertisement(getStore().user.access_token, payload, lenderID);
+                getActions().setLoading(false);
+
+                if (getActions().valiateApiResponse(apiResponse, "Success, posted loan advertisement", true)) {
+                    setStore({ latestLoanAdvertisement: apiResponse })
                     return true;
                 }
 
@@ -185,21 +212,22 @@ const getState = ({ getStore, getActions, setStore }) => {
 
             postLoanOffer: async (payload) => {
                 getActions().setLoading(true);
+                const user = getActions().getSessionStorage('user');
 
-                if (!getActions().hasAccessToken() || !getActions().getSessionStorage('user').user.debtor.debtorID) {
+                if (!getActions().hasAccessToken() || !user.debtor.debtorID) {
                     getActions().setLoading(false);
                     getActions().valiateApiResponse("Error: Failed to post proposal", "", true)
                     return false;
                 }
 
                 // get the debtor ID
-                const debtorID = getActions().getSessionStorage('user').user.debtor.debtorID;
+                const debtorID = user.debtor.debtorID;
 
                 const apiResponse = await postLoanOffer(getStore().user.access_token, payload, debtorID);
                 getActions().setLoading(false);
 
                 if (getActions().valiateApiResponse(apiResponse, "Success, posted loan proposal", true)) {
-                    setStore({latestLoanOffer: apiResponse})
+                    setStore({ latestLoanOffer: apiResponse })
                     return true;
                 }
 
@@ -271,14 +299,15 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
-            toggleAndSaveUserMode: () => {
-                const userMode = getStore().toggleUserMode;
-                if (userMode == "debtor") {
-                    setStore({toggleUserMode : 'lender'});
-                    getActions().saveToLocalStorage('activeMode', userMode)
-                } else {
-                    setStore({toggleUserMode : 'debtor'});
-                    getActions().saveToLocalStorage('activeMode', userMode)
+            setUserMode: (mode) => {
+                if (mode === "debtor") {
+                    setStore({ toggleUserMode: 'debtor' });
+                    getActions().saveToLocalStorage('activeMode', 'debtor')
+                }
+
+                else if (mode === "lender") {
+                    setStore({ toggleUserMode: 'lender' });
+                    getActions().saveToLocalStorage('activeMode', 'lender')
                 }
             },
 

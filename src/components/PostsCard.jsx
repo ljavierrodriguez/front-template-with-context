@@ -1,8 +1,6 @@
 import React from 'react';
 import Icon from '../components/Icon';
-import { Link } from 'react-router-dom';
-
-function PublicationsCard({ lendersName, username, loanAmount, negotiable, profilePicture, postId }) {
+function PostsCard({debtorsName, username, loanAmount, profilePicture }) {
     return (
         <>
             <div className='container bg-dark pb-2 mb-4 rounded'>
@@ -15,22 +13,18 @@ function PublicationsCard({ lendersName, username, loanAmount, negotiable, profi
                             <span className='text-primary text-opacity-50 fs-6'>{username}</span>
                             <span className='text-primary fw-bold '>{loanAmount}</span>
                         </div>
-                        <h5 className='text-white'>{lendersName}</h5>
+                        <h5 className='text-white'>{debtorsName}</h5>
                         <p className='textcardlocation text-secondary pt-2'> <Icon type={'solid'} symbol={'location-dot'} /> Santiago,Chile </p>
 
                     </div>
                 </div>
                 <div className='d-flex justify-content-around'>
                     <div className=''>
-                        <span className='textcard text-primary text-opacity-50 bg-black m-1 rounded px-1'>{negotiable}</span>
                         <span className='textcard text-primary text-opacity-75 bg-black m-1 rounded px-1'>1 Transacción</span>
                     </div>
                     <div className=''>
-                        <Link to={"/post/" + postId}>
-                            <span className='text-white'> <Icon type={'regular'} symbol={'pen-to-square'} /></span>
-                        </Link>
-
-                        {/* <span className='text-white'> <Icon type={'solid'} symbol={'trash'} /></span> */}
+                        <span className='text-white'>  <Icon type={'regular'} symbol={'pen-to-square'} /></span>
+                        <span className='text-white'>  <Icon type={'solid'} symbol={'trash'} /></span>
                     </div>
                 </div>
                 <div>
@@ -39,4 +33,4 @@ function PublicationsCard({ lendersName, username, loanAmount, negotiable, profi
         </>
     )
 }
-export default PublicationsCard;
+export default PostsCard;

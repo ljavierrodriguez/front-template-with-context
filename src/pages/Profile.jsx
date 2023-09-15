@@ -5,22 +5,22 @@ import Icon from '../components/Icon';
 import { get } from 'react-hook-form';
 import NavbarVertical from '../components/NavbarVertical';
 import TopBar from '../components/TopBar';
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
     const navigate = useNavigate();
     const { store, actions } = useContext(Context);
     const [profilePictureFile, setProfilePictureFile] = useState(null);
     const [profilePictureFileError, setProfilePictureFileError] = useState('');
-    
-    const toggleAndSaveUserMode =  () => {actions.toggleAndSaveUserMode()}
+
+    const toggleAndSaveUserMode = (mode) => { actions.setUserMode(mode) }
 
     //get the user
     useEffect(() => {
         const getUser = async () => {
             await actions.getUser()
         }
-   
+
         getUser();
 
     }, []);
@@ -61,23 +61,37 @@ const Profile = () => {
 
                 <div className='mt-3 col-md-7 offset-md-1'>
                     {store.user.user ? <>
-                        <div className='p-1 btn_post_choices_wrapper rounded '>
-                            <button className='btn_post_choices text-white bg-primary rounded p-2 w-50' onClick={toggleAndSaveUserMode}>Prestatario</button>
-                            <button className='btn_post_choices text-secondary rounded p-2 w-50' onClick={toggleAndSaveUserMode}>Prestamista</button>
-                        </div>
+                        <ul className="nav nav-tabs justify-content-center w-100" id="myTab">
+                            <li className="nav-item w-50 ps-5 text-center">
+                                <a href="#" className="nav-link active" data-bs-toggle="tab" onClick={() => toggleAndSaveUserMode('debtor')}>Prestatario</a>
+                            </li>
+                            <li className="nav-item w-50 pe-5 text-center">
+                                <a href="#" className="nav-link" data-bs-toggle="tab" onClick={() => toggleAndSaveUserMode('lender')}>Prestamista</a>
+                            </li>
+                        </ul>
 
-                        <div className='d-flex justify-content-center text-white mt-3 mb-2'>
-                           
-                                <img src={store.user.user.profilePictureLink} alt="profile-picture" height={'175px'} className='rounded'></img>
-                         
-                            {profilePictureFile ? <button type="submit" className="btn btn-secondary mb-2 w-100" onClick={handleUploadProfilePicture}>Update profile picture</button> : ""}
+                        <div className='justify-content-center text-white mt-3 mb-2'>
+                            <div className="row">
+                                <div className="col-6">
+                                    <img src={store.user.user.profilePictureLink} alt="profile-picture" height={'120px'} className='rounded float-end'></img>
+                                </div>
+                                <div className="col-6">
+                                    <div className="row h-50">
+                                        {profilePictureFile ? <button type="submit" className="btn btn-secondary mb-2 btn-sm w-50" onClick={handleUploadProfilePicture}>Update profile picture</button> : ""}
+                                    </div>
+                                    <div className="row h-50 align-items-end">
+                                        <div className="col">
+                                            <span className='text-white align-self-baseline fs-5'>
+                                                <label className="custom-file-upload" style={{cursor: "pointer"}}>
+                                                    <input type="file" accept="image/png, image/jpeg" onChange={(e) => setProfilePictureFile(e.target.files[0])} style={{ display: 'none'}} />
+                                                    <Icon type={'solid'} symbol={'pen-to-square'}/>
+                                                </label>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
 
-                            <span className='text-white align-self-baseline fs-5'>
-                                <label className="custom-file-upload">
-                                    <input type="file" accept="image/png, image/jpeg" onChange={(e) => setProfilePictureFile(e.target.files[0])} style={{ display: 'none' }} />
-                                    <Icon type={'solid'} symbol={'pen-to-square'} />
-                                </label>
-                            </span>
+                            </div>
                         </div>
                         <div className='mx-4 mt-3'>
                             <div>
@@ -121,7 +135,7 @@ const Profile = () => {
 
                             <div className='mt-4 d-md-none'>
                                 <button className='w-50 text-primary p-0 m-0 fs-4 border border-0 rounded btn_post_choices_wrapper' ><Icon type={'solid'} symbol={'file-invoice'} /><br /><span className='fs-6 p-0 m-0'>Propuestas</span></button>
-                                <button className='w-50 text-primary p-0 m-0 fs-4 border border-0 rounded btn_post_choices_wrapper' onClick={() => {navigate("/profile")}}><Icon type={'solid'} symbol={'user'} /><br /><span className='fs-6 p-0 m-0'>Perfil</span></button>
+                                <button className='w-50 text-primary p-0 m-0 fs-4 border border-0 rounded btn_post_choices_wrapper' onClick={() => { navigate("/profile") }}><Icon type={'solid'} symbol={'user'} /><br /><span className='fs-6 p-0 m-0'>Perfil</span></button>
                             </div>
                         </div>
                     </> : <p className='text-white'>No user information found</p>}

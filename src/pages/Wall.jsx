@@ -55,7 +55,7 @@ const Wall = () => {
                     {
                         store.loanAdvertisements ?
                             store.loanAdvertisements.map((loanAdv, i) => (
-                                <PublicationsCard lendersName={loanAdv.lender.user.firstName} username={loanAdv.lender.user.username} loanAmount={loanAdv.amount} negotiable={loanAdv.negotiable} key={i}/>
+                                <PublicationsCard lendersName={loanAdv.lender.user.firstName} username={loanAdv.lender.user.username} loanAmount={loanAdv.amount} negotiable={"Negociable: " + loanAdv.negotiable.toString()} profilePicture={loanAdv.lender.user.profilePictureLink} postId={loanAdv.loanAdvertisementID} key={i}/>
                             )) : <p className='text-white'>Sin publicaciones</p>
 
                             }
