@@ -73,10 +73,22 @@ export const getLoanAdvertisements = async (authHeader) => {
     return sendAPI("GET", "application/json", authHeader, null, "loans/loan-advertisements");
 }
 
+export const getLoanAdvertisement = async(authHeader, loanAdvertisementID) => {
+    return sendAPI("GET", "application/json", authHeader, null, "loans/loan-advertisements/" + loanAdvertisementID)
+}
+
+export const postLoanOffer = async(authHeader, payload, debtorID) => {
+    return sendAPI("POST", "application/json", authHeader, payload, "debtor/" + debtorID + "/loan-offer")
+}
+
 export const getBancoOptions = async () => {
     return sendAPI("GET", "application/json", null, null, "admin/bank");
 }
 
 export const getAccountTypeOptions = async () => {
     return sendAPI("GET", "application/json", null, null, "admin/account-type");
+}
+
+export const getPaymentFrequencyTypesOptions = async () => {
+    return sendAPI("GET", "application/json", null, null, "admin/payment-frequencies");
 }
