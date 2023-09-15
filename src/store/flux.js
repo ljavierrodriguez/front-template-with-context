@@ -6,6 +6,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         store: {
             user: null,
             loanAdvertisement: null,
+            toggleUserMode: "debtor",
             loanAdvertisements: null,
             latestLoanOffer: null,
             bancoOptions: [],
@@ -152,7 +153,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 getActions().setLoading(false);
 
                 if (getActions().valiateApiResponse(apiResponse, "Success, fetched loan advertisements successfully", false)) {
-                    setStore({loanAdvertisements: apiResponse})
+                    setStore({loanAdvertisements: apiResponse })
                     return true;
                 }
 
@@ -267,6 +268,17 @@ const getState = ({ getStore, getActions, setStore }) => {
                         // Neither user object nor local storage contains an access token
                         return false;
                     }
+                }
+            },
+
+            toggleAndSaveUserMode: () => {
+                const userMode = getStore().toggleUserMode;
+                if (userMode == "debtor") {
+                    setStore({toggleUserMode : 'lender'});
+                    getActions().saveToLocalStorage('activeMode', userMode)
+                } else {
+                    setStore({toggleUserMode : 'debtor'});
+                    getActions().saveToLocalStorage('activeMode', userMode)
                 }
             },
 
