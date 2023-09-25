@@ -12,6 +12,8 @@ const Profile = () => {
     const { store, actions } = useContext(Context);
     const [profilePictureFile, setProfilePictureFile] = useState(null);
     const [profilePictureFileError, setProfilePictureFileError] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState(null);
+    const [bank, setBank] = useState(null);
 
     const toggleAndSaveUserMode = (mode) => { actions.setUserMode(mode) }
 
@@ -42,6 +44,48 @@ const Profile = () => {
 
         if (updateProfilePicture) {
             setProfilePictureFile(null);
+        }
+    }
+
+    const openFormControl = (formControl, valueToSet) => {
+        if (formControl === "phone") {
+            setPhoneNumber(valueToSet);
+        }
+
+        else if (formControl === "bank") {
+            setBank(valueToSet);
+        }
+    }
+
+    const submitFormControl = async (formControl, valueToSet) => {
+        if (formControl === "phone") {
+
+            // Create the final payload
+            const payload = {
+                phoneNumber: valueToSet,
+            };
+
+            const updateProfilePhone = await actions.updateProfilePhone(payload);
+
+            if (updateProfilePhone) {
+                setPhoneNumber(null);
+            }
+        }
+
+        else if (formControl === "bank"){
+            // Create the final payload
+            const payload = {
+                bankAccountNumber: valueToSet.accountNumber,
+                bankNameID: valueToSet.bank,
+                accountTypeID: valueToSet.account,
+            };
+
+            console.log(payload);
+            const updateProfileBank = await actions.updateProfileBank(payload);
+
+            if (updateProfileBank) {
+                setBank(null);
+            }
         }
     }
 
@@ -82,9 +126,9 @@ const Profile = () => {
                                     <div className="row h-50 align-items-end">
                                         <div className="col">
                                             <span className='text-white align-self-baseline fs-5'>
-                                                <label className="custom-file-upload" style={{cursor: "pointer"}}>
-                                                    <input type="file" accept="image/png, image/jpeg" onChange={(e) => setProfilePictureFile(e.target.files[0])} style={{ display: 'none'}} />
-                                                    <Icon type={'solid'} symbol={'pen-to-square'}/>
+                                                <label className="custom-file-upload" style={{ cursor: "pointer" }}>
+                                                    <input type="file" accept="image/png, image/jpeg" onChange={(e) => setProfilePictureFile(e.target.files[0])} style={{ display: 'none' }} />
+                                                    <Icon type={'solid'} symbol={'pen-to-square'} />
                                                 </label>
                                             </span>
                                         </div>
@@ -113,24 +157,97 @@ const Profile = () => {
                             <div>
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <p className='text-white m-0'>Teléfono</p>
-                                    <p className='text-white fs-5'>
+                                    <p className='text-white fs-5' onClick={() => openFormControl("phone", store.user.user.phoneNumber)} style={{ cursor: "pointer" }}>
                                         <Icon type={'solid'} symbol={'pen-to-square'} />
                                     </p>
                                 </div>
-                                <p className='text-secondary m-0'>{store.user.user.phoneNumber}</p>
+                                {phoneNumber ?
+                                    <>
+                                        <div className="row">
+                                            <div className="col-6">
+                                                <input type="text" defaultValue={store.user.user.phoneNumber} className="form-control" id="phone" onChange={(e) => { setPhoneNumber(e.target.value) }} />
+                                            </div>
+                                            <div className="col-6">
+                                                <button type="submit" className="btn btn-secondary btn-sm w-50 h-100" style={{fontSize: "1.5vh"}} onClick={() => submitFormControl("phone", phoneNumber)}>Update Teléfono</button>
+                                            </div>
+                                        </div>
+                                    </>
+                                    : <p className='text-secondary m-0'>{store.user.user.phoneNumber}</p>}
                             </div>
                             <div>
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <p className='text-white m-0'>Datos bancarios</p>
-                                    <p className='text-white fs-5'>
+                                    <p className='text-white fs-5' onClick={() => openFormControl("bank", { bank: store.user.user.bankDetails.bank.bankID, account: store.user.user.bankDetails.accountType.accountTypeID, accountNumber: store.user.user.bankDetails.bankAccountNumber })} style={{ cursor: "pointer" }}>
                                         <Icon type={'solid'} symbol={'pen-to-square'} />
                                     </p>
                                 </div>
-                                <span className='text-secondary'>{store.user.user.bankDetails.bank.bankName}</span>
-                                <br />
-                                <span className='text-secondary'>{store.user.user.bankDetails.accountType.accountName}</span>
-                                <br />
-                                <span className='text-secondary'>{store.user.user.bankDetails.bankAccountNumber}</span>
+                                {bank ?
+                                    <>
+                                        <div className="row">
+                                            <div className="col-12">
+                                                <div className="row">
+                                                    <div className="col-6">
+                                                        <div className="mb-3">
+                                                            <label htmlFor="bank" className="form-label text-white">Banco<span className='text-danger'>*</span></label>
+                                                            <select className="form-select" id='bank' value={bank.bank} onChange={(e) => {
+                                                                let tempBank = bank;
+                                                                tempBank.bank = e.target.value;
+                                                                setBank(tempBank)
+                                                            }}>
+                                                                {store.bancoOptions.map((option) => (
+                                                                    <option key={option.bankID} value={option.bankID}>
+                                                                        {option.bankName}
+                                                                    </option>
+                                                                ))}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    <div className="col-6">
+                                                        <div className="mb-3">
+                                                            <label htmlFor="account" className="form-label text-white">Tipo de cuenta<span className='text-danger'>*</span></label>
+                                                            <select className="form-select" id='account' value={bank.account} onChange={(e) => {
+                                                                let tempBank = bank;
+                                                                tempBank.account = e.target.value;
+                                                                setBank(tempBank);
+                                                            }}>
+                                                                {store.accountTypeOptions.map((option) => (
+                                                                    <option key={option.accountTypeID} value={option.accountTypeID}>
+                                                                        {option.accountName}
+                                                                    </option>
+                                                                ))}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div className="col-6 d-flex align-items-center">
+                                                        <button type="submit" className="btn btn-secondary btn-sm w-50 h-50" style={{fontSize: "1.5vh"}} onClick={() => submitFormControl("bank", bank)}>Update Banco</button>
+                                                    </div>
+                                                </div>
+                                                <div className="row">
+                                                    <div className="col-6">
+                                                        <div className="mb-3">
+                                                            <label htmlFor="accountNumber" className="form-label text-white">Número de cuenta<span className='text-danger'>*</span></label>
+                                                            <input type="password" defaultValue={bank.accountNumber} className="form-control" id="accountNumber" onChange={(e) => {
+                                                                let tempBank = bank;
+                                                                tempBank.accountNumber = e.target.value;
+                                                                setBank(tempBank)
+                                                            }} />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </>
+                                    :
+                                    <>
+                                        <span className='text-secondary'>{store.user.user.bankDetails.bank.bankName}</span>
+                                        <br />
+                                        <span className='text-secondary'>{store.user.user.bankDetails.accountType.accountName}</span>
+                                        <br />
+                                        <span className='text-secondary'>{store.user.user.bankDetails.bankAccountNumber}</span>
+                                    </>
+                                }
                             </div>
 
                             <div className='mt-4 d-md-none'>

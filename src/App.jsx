@@ -9,6 +9,7 @@ import LoanForm from './pages/LoanForm';
 import Notification from './pages/Notification';
 import Profile from './pages/Profile';
 import Proposal from './pages/Proposal';
+import ProposalEdit from './pages/ProposalEdit';
 import Wall from './pages/Wall';
 import Publications from './pages/Publications';
 import NotificationToast from './components/NotificationToast';
@@ -44,6 +45,9 @@ const App = () => {
           </Route>
           <Route path="/post/:postId/proposal" element={<PrivateRoute />}>
             <Route path="/post/:postId/proposal" element={<Proposal />} />
+          </Route>
+          <Route path="/debtor/:debtorId/loan-proposal/:offerId" element={<PrivateRoute />}>
+            <Route path="/debtor/:debtorId/loan-proposal/:offerId" element={<ProposalEdit />} />
           </Route>
           <Route path="/loan-form" element={<PrivateRoute />}>
             <Route path="/loan-form" element={<LoanForm />} />
