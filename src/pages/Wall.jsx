@@ -10,20 +10,21 @@ import { Context } from '../store/AppContext';
 const Wall = () => {
 
     const { store, actions } = useContext(Context);
+
     //get the loan advertisements
     useEffect(() => {
 
         const handleGetLoanAdvertisements = async () => {
             await actions.getLoanAdvertisements();
-           
+
         }
         handleGetLoanAdvertisements()
-       
+
     }, []);
 
 
     return (
-        
+
         <div className='container-fluid'>
             <div className='d-md-none'>
                 <Navbar />
@@ -32,7 +33,7 @@ const Wall = () => {
             <div className='row d-md-none'>
                 <div className='col-10'>
                     <h5 className='text-secondary mx-3 mb-0'>Bienvenido!</h5>
-                    <p className='text-white mx-3 mt-0 mb-0'>LUIS</p>
+                    <p className='text-white mx-3 mt-0 mb-0'>{store.user.user ? store.user.user.firstName + " " + store.user.user.lastName : ""}</p>
                 </div>
                 <div className='col-2'>
                     <span className='text-white'> <Icon type={'regular'} symbol={'bell'} /></span>
@@ -55,10 +56,10 @@ const Wall = () => {
                     {
                         store.loanAdvertisements ?
                             store.loanAdvertisements.map((loanAdv, i) => (
-                                <PublicationsCard lendersName={loanAdv.lender.user.firstName} username={loanAdv.lender.user.username} loanAmount={loanAdv.amount} negotiable={"Negociable: " + loanAdv.negotiable.toString()} profilePicture={loanAdv.lender.user.profilePictureLink} postId={loanAdv.loanAdvertisementID} key={i}/>
+                                <PublicationsCard lendersName={loanAdv.lender.user.firstName} username={loanAdv.lender.user.username} loanAmount={loanAdv.amount} negotiable={"Negociable: " + loanAdv.negotiable.toString()} profilePicture={loanAdv.lender.user.profilePictureLink} postId={loanAdv.loanAdvertisementID} key={i} />
                             )) : <p className='text-white'>Sin publicaciones</p>
 
-                            }
+                    }
                 </div>
             </div>
             <div className='midiv row col-12 d-md-none fixed-bottom'>

@@ -13,7 +13,7 @@ const NotificationToast = () => {
                     <Toast key={toast.id} onClose={() => actions.removeNotification(toast.id)}>
                         <ToastHeader icon={toast.notificationType}>
                             <img src="..." className="rounded me-2" alt="" />
-                            <strong className="me-auto">API Response </strong>
+                            <strong className="me-auto">Notification </strong>
                             <small>{toast.time}</small>
                             <Button close onClick={() => actions.removeNotification(toast.id)} />
                         </ToastHeader>

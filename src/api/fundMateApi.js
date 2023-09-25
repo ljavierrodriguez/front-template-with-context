@@ -69,6 +69,14 @@ export const updateProfilePicture = async (authHeader, user_id, form_data) => {
     return sendAPI("PUT", null, authHeader, form_data, "user/" + user_id + "/profile-picture")
 }
 
+export const updateProfilePhone = async (authHeader, payload, user_id) => {
+    return sendAPI("PUT", "application/json", authHeader, payload, "user/" + user_id + "/phone")
+}
+
+export const updateProfileBank = async (authHeader, payload, user_id) => {
+    return sendAPI("PUT", "application/json", authHeader, payload, "user/" + user_id + "/bank")
+}
+
 export const getLoanAdvertisements = async (authHeader) => {
     return sendAPI("GET", "application/json", authHeader, null, "loans/loan-advertisements");
 }
@@ -81,8 +89,16 @@ export const postLoanAdvertisement = async(authHeader, payload, lenderID) => {
     return sendAPI("POST", "application/json", authHeader, payload, "lender/" + lenderID + "/loan-advertisment")
 }
 
+export const getLoanOffer = async(authHeader, debtorID, loanOfferID) => {
+    return sendAPI("GET", "application/json", authHeader, null, "debtor/" + debtorID + "/loan-offers/" + loanOfferID)
+}
+
 export const postLoanOffer = async(authHeader, payload, debtorID) => {
     return sendAPI("POST", "application/json", authHeader, payload, "debtor/" + debtorID + "/loan-offer")
+}
+
+export const deleteLoanOffer = async(authHeader, debtorID, loanOfferID) => {
+    return sendAPI("DELETE", "application/json", authHeader, null, "debtor/" + debtorID + "/loan-offers/" + loanOfferID)
 }
 
 export const getBancoOptions = async () => {

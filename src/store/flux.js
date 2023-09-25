@@ -1,4 +1,4 @@
-import { BASE_URL, registerUser, loginUser, getUser, updateProfilePicture, getLoanAdvertisements, getLoanAdvertisement, postLoanAdvertisement, postLoanOffer, getBancoOptions, getAccountTypeOptions, getPaymentFrequencyTypesOptions } from '../api/fundMateApi.js';
+import { BASE_URL, registerUser, loginUser, getUser, updateProfilePicture, updateProfilePhone, updateProfileBank, getLoanAdvertisements, getLoanAdvertisement, postLoanAdvertisement, getLoanOffer, postLoanOffer, deleteLoanOffer, getBancoOptions, getAccountTypeOptions, getPaymentFrequencyTypesOptions } from '../api/fundMateApi.js';
 import Cookies from 'js-cookie';
 
 const getState = ({ getStore, getActions, setStore }) => {
@@ -6,6 +6,7 @@ const getState = ({ getStore, getActions, setStore }) => {
         store: {
             user: null,
             loanAdvertisement: null,
+            loanOffer: null,
             toggleUserMode: "debtor",
             loanAdvertisements: null,
             latestLoanAdvertisement: null,
@@ -143,6 +144,46 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
+            updateProfilePhone: async (payload) => {
+                getActions().setLoading(true);
+                if (!Cookies.get('userID') || !getActions().hasAccessToken()) {
+                    getActions().setLoading(false);
+                    getActions().valiateApiResponse("Error: Failed to get user", "", true);
+                    return false;
+                }
+
+                const apiResponse = await updateProfilePhone(getStore().user.access_token, payload, Cookies.get('userID'));
+                getActions().setLoading(false);
+
+                if (getActions().valiateApiResponse(apiResponse, "Success, updated teléfono", true)) {
+                    return await getActions().getUser();
+                }
+
+                else {
+                    return false;
+                }
+            },
+
+            updateProfileBank: async (payload) => {
+                getActions().setLoading(true);
+                if (!Cookies.get('userID') || !getActions().hasAccessToken()) {
+                    getActions().setLoading(false);
+                    getActions().valiateApiResponse("Error: Failed to get user", "", true);
+                    return false;
+                }
+
+                const apiResponse = await updateProfileBank(getStore().user.access_token, payload, Cookies.get('userID'));
+                getActions().setLoading(false);
+
+                if (getActions().valiateApiResponse(apiResponse, "Success, updated banco", true)) {
+                    return await getActions().getUser();
+                }
+
+                else {
+                    return false;
+                }
+            },
+
             getLoanAdvertisements: async () => {
                 getActions().setLoading(true);
 
@@ -210,6 +251,29 @@ const getState = ({ getStore, getActions, setStore }) => {
                 }
             },
 
+            getLoanOffer: async (debtorID, loanOfferID) => {
+                getActions().setLoading(true);
+                const user = getActions().getSessionStorage('user');
+
+                if (!getActions().hasAccessToken()) {
+                    getActions().setLoading(false);
+                    getActions().valiateApiResponse("Error: Failed to delete loan offer", "", true)
+                    return false;
+                }
+
+                const apiResponse = await getLoanOffer(getStore().user.access_token, debtorID, loanOfferID);
+                getActions().setLoading(false);
+
+                if (getActions().valiateApiResponse(apiResponse, "Success, loan offer retrieved", false)) {
+                    setStore({ loanOffer: apiResponse });
+                    return true;
+                }
+
+                else {
+                    return false;
+                }
+            },
+
             postLoanOffer: async (payload) => {
                 getActions().setLoading(true);
                 const user = getActions().getSessionStorage('user');
@@ -228,6 +292,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 
                 if (getActions().valiateApiResponse(apiResponse, "Success, posted loan proposal", true)) {
                     setStore({ latestLoanOffer: apiResponse })
+                    return true;
+                }
+
+                else {
+                    return false;
+                }
+            },
+
+            deleteLoanOffer: async (debtorID, loanOfferID) => {
+                getActions().setLoading(true);
+                const user = getActions().getSessionStorage('user');
+
+                if (!getActions().hasAccessToken()) {
+                    getActions().setLoading(false);
+                    getActions().valiateApiResponse("Error: Failed to delete loan offer", "", true)
+                    return false;
+                }
+
+                const apiResponse = await deleteLoanOffer(getStore().user.access_token, debtorID, loanOfferID);
+                getActions().setLoading(false);
+
+                if (getActions().valiateApiResponse(apiResponse, "Success, deleted loan post", true)) {
                     return true;
                 }
 

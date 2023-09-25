@@ -1,10 +1,13 @@
 import React from 'react';
 import Icon from '../components/Icon';
-function PostsCard({debtorsName, username, loanAmount, profilePicture }) {
+import "../css/card.css";
+
+function PostsCard({ loanOfferID, debtorsName, debtorID, userDebtorID, username, loanAmount, profilePicture, deletePostCallback, editPostCallback }) {
+
     return (
         <>
-            <div className='container bg-dark pb-2 mb-4 rounded'>
-                <div className='row  d-flex justify-content-between'>
+            <div className='container bg-dark pb-2 mb-4 rounded innerCard'>
+                <div className='row d-flex justify-content-between p-2'>
                     <div className='text-white col-3 display-1 align-self-center text-center'>
                         {profilePicture ? <img src={profilePicture} alt="profile-picture" height={'60px'} className='rounded'></img> : <Icon type={'solid'} symbol={'user'} />}
                     </div>
@@ -23,8 +26,11 @@ function PostsCard({debtorsName, username, loanAmount, profilePicture }) {
                         <span className='textcard text-primary text-opacity-75 bg-black m-1 rounded px-1'>1 Transacción</span>
                     </div>
                     <div className=''>
-                        <span className='text-white'>  <Icon type={'regular'} symbol={'pen-to-square'} /></span>
-                        <span className='text-white'>  <Icon type={'solid'} symbol={'trash'} /></span>
+                        {debtorID != userDebtorID ? "" :
+                            <>
+                                <span className='text-white' style={{cursor:"pointer"}}>  <Icon type={'regular'} symbol={'pen-to-square'} /></span>
+                                <span className='text-white' style={{cursor:"pointer"}} onClick={() => deletePostCallback(debtorID, loanOfferID)}>  <Icon type={'solid'} symbol={'trash'} /></span>
+                            </>}
                     </div>
                 </div>
                 <div>
