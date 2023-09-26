@@ -62,7 +62,7 @@ const Wall = () => {
                     }
                 </div>
             </div>
-            <div className='midiv row col-12 d-md-none fixed-bottom'>
+            <div className='row col-12 d-md-none fixed-bottom' style={{ backgroundColor: "#01418f", right: "unset", left: "unset" }}>
                 <div className='text-primary text-opacity-75 fs-6 text-center col-6'>
                     <i><Icon type={'solid'} symbol={'house'} />
                         <p>Home</p></i> </div>
