@@ -11,9 +11,13 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.4.2",
     "bootstrap": "^5.3.1",
+    "js-cookie": "^3.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.15.0"
+    "react-dropzone": "^11.2.4",
+    "react-hook-form": "^7.46.1",
+    "react-router-dom": "^6.15.0",
+    "reactstrap": "^9.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.26",
