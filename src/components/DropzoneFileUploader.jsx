@@ -80,7 +80,7 @@ function DropzoneFileUploader({ onFileDrop, fileReference }) {
             <div className='d-flex justify-content-center align-items-center w-75' {...getRootProps({ style })}>
                 <input {...getInputProps()} accept="image/png, image/jpeg, application/pdf"></input>
                 <label className='rounded text-center' id='idFile' style={{ cursor: 'pointer', width: '100%', color: 'rgb(142, 139, 139)', padding: '10px', height: "100px", backgroundColor: files.length > 0 ? 'rgba(12, 13, 21, 0.5)' : '#0C0D15' }}>
-                    {files.length > 0 ? "" : <><Icon type={'solid'} symbol={'cloud-arrow-up'} /> <br /> {"PDF, JPEG, PNG"} <br /> <span className='text-primary'>Drag and drop your images here or browse</span></>}
+                    {files.length > 0 ? "" : <><Icon type={'solid'} symbol={'cloud-arrow-up'} /> <br /> {"PDF, JPEG, PNG"} <br /> <span style={{fontSize: "2vh"}} className='text-primary'>Drag  your images here or browse</span></>}
                 </label>
             </div>
             {files.length > 0 ? <span className='text-secondary d-flex justify-content-center align-items-center p-1'>{files[0].name}</span> : ""}

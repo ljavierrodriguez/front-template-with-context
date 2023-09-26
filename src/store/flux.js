@@ -106,7 +106,7 @@ const getState = ({ getStore, getActions, setStore }) => {
                 getActions().setLoading(true);
                 if (!Cookies.get('userID') || !getActions().hasAccessToken()) {
                     getActions().setLoading(false);
-                    getActions().valiateApiResponse("Error: Failed to get user", "", true);
+                    getActions().valiateApiResponse("Error: Failed to get user", "", false);
                     return false;
                 }
 

@@ -33,7 +33,7 @@ const ProposalEdit = () => {
             offerStatusID: "1"
         };
 
-        const proposalResult = await actions.postLoanOffer(payload);
+        const proposalResult = await actions.updateLoanOffer(payload);
 
         if (proposalResult) {
             navigate('/post/' + store.loanOffer.postId);
@@ -52,7 +52,7 @@ const ProposalEdit = () => {
                                 <div className="col-md-6">
                                     <div className="mb-3">
                                         <label htmlFor="interest" className="form-label text-white">Taza de interés<span className='text-danger'>*</span></label>
-                                        <input type="text" {...register("interest", { required: 'Debe ingresar una taza de interés' })} className="form-control" id="interest" placeholder="Ingresa un valor numérico" />
+                                        <input type="text" {...register("interest", { required: 'Debe ingresar una taza de interés' })} className="form-control" id="interest" defaultValue={store.loanOffer.loanAdvertisement.interest} placeholder="Ingresa un valor numérico" />
                                         <p className='text-danger'>{errors.interest?.message}</p>
                                     </div>
                                 </div>
@@ -69,7 +69,7 @@ const ProposalEdit = () => {
                                 <div className="col-md-6">
                                     <div className="mb-3">
                                         <label htmlFor="paymentType" className="form-label text-white">Tipo de pago<span className='text-danger'>*</span></label>
-                                        <select className="form-select" {...register("paymentType", { required: 'Seleccione un tipo de pago' })} id='paymentType'>
+                                        <select className="form-select" {...register("paymentType", { required: 'Seleccione un tipo de pago' })} id='paymentType' defaultValue={store.loanOffer.paymentFrequency}>
                                             <option value="" disabled>Seleccione</option>
                                             {store.paymentFrequencyTypeOptions.map((option) => (
                                                 <option key={option.paymentFrequencyID} value={option.paymentFrequencyID}>
@@ -83,7 +83,7 @@ const ProposalEdit = () => {
                                 <div className="col-md-6">
                                     <div className="mb-3">
                                         <label htmlFor="comments" className="form-label text-white">Comentarios:</label>
-                                        <textarea className="form-control" id="comments" rows="3"></textarea>
+                                        <textarea className="form-control" id="comments" rows="3" defaultValue={store.loanOffer.comment}></textarea>
                                     </div>
                                 </div>
                             </div>
