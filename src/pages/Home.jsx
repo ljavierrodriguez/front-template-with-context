@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Context } from '../store/AppContext';
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import "../css/typewriterAnimation.css";
 
 const Home = () => {
     const { store, actions } = useContext(Context);
@@ -41,28 +42,27 @@ const Home = () => {
 
                     <div className='col-md-12 d-none d-sm-none d-md-inline mt-2 mb-2'>
                         <div className='text-white text-center'>
-                            <p><i>Somos una plataforma que busca democratizar el acceso a los créditos e impulsar la inversión inteligente. Nos caracterizan la seguridad,  transparencia y responsabilidad financiera con nuestros usuarios. Hoy por hoy FundMate se erige como una fuerza disruptiva en el mundo de las finanzas, empoderando a todos para que tomen el control de sus inversiones y den rienda suelta a su potencial financiero.
-                            </i></p>
+                            <span class="typewriter" style={{ '--n': 1000 }}> Somos una plataforma que busca democratizar el acceso a los créditos e impulsar la inversión inteligente. Nos caracterizan la seguridad,  transparencia y responsabilidad financiera con nuestros usuarios. Hoy por hoy FundMate se erige como una fuerza disruptiva en el mundo de las finanzas, empoderando a todos para que tomen el control de sus inversiones y den rienda suelta a su potencial financiero.</span>
                         </div>
                     </div>
                 </div>
                 <div className='col-12 col-md-6 align-items-center justify-content-center p-3'>
-                    <div className="row m-0" style={{height: "65%"}}>
+                    <div className="row m-0" style={{ height: "65%" }}>
                         {/* Login Form */}
                         <div className="col-12 col-md-10 d-flex flex-column align-items-center justify-content-center pt-2 pb-2 ps-5 pe-5 p-md-0">
-                            <form className="w-100" onSubmit={reactHookFormSubmit(handleLogin)}>
+                            <form className="w-100 p-3" onSubmit={reactHookFormSubmit(handleLogin)}>
                                 <label htmlFor="username" className="form-label text-white">Usuario:</label>
-                                <input type="text" {...register("username", { required: 'Debe ingresar su nombre de usuario' })} className="form-control" id="username" onChange={(e) => setUsername(e.target.value)}></input>
+                                <input type="text" {...register("username", { required: 'Debe ingresar su nombre de usuario' })} className="form-control bg-transparent text-light" id="username" onChange={(e) => setUsername(e.target.value)}></input>
                                 <p className='text-danger'>{errors.username?.message}</p>
-                                <label htmlFor="password" className="form-label text-white">Contraseña:</label>
-                                <input type="password" {...register("password", { required: 'Debe ingresar su contraseña' })} className="form-control" id="password" onChange={(e) => setPassword(e.target.value)}></input>
+                                <label htmlFor="password" className="form-label text-light">Contraseña:</label>
+                                <input type="password" {...register("password", { required: 'Debe ingresar su contraseña' })} className="form-control bg-transparent text-light" id="password" onChange={(e) => setPassword(e.target.value)}></input>
                                 <p className='text-danger'>{errors.password?.message}</p>
                                 <p className='text-center mb-2 text-white'>¿Has olvidado tu contraseña?</p>
                                 <button type="submit" className="btn btn-primary mb-2 w-100">Iniciar Sesión</button>
                             </form>
                         </div>
                     </div>
-                    <div className="row m-0" style={{height: "35%"}}>
+                    <div className="row m-0" style={{ height: "35%" }}>
                         {/* Buttons */}
                         <div className="col-12 col-md-10 d-flex flex-column align-items-center justify-content-center pt-2 pb-5 ps-5 pe-5 p-md-0">
                             <button type="submit" className="btn btn-secondary mb-2 w-100" onClick={() => navigate('/register')}>Crear nueva cuenta</button>

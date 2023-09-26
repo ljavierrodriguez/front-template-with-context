@@ -189,7 +189,7 @@ const Profile = () => {
                                                     <div className="col-6">
                                                         <div className="mb-3">
                                                             <label htmlFor="bank" className="form-label text-white">Banco<span className='text-danger'>*</span></label>
-                                                            <select className="form-select" id='bank' value={bank.bank} onChange={(e) => {
+                                                            <select className="form-select" id='bank' defaultValue={bank.bank} onChange={(e) => {
                                                                 let tempBank = bank;
                                                                 tempBank.bank = e.target.value;
                                                                 setBank(tempBank)
@@ -207,7 +207,7 @@ const Profile = () => {
                                                     <div className="col-6">
                                                         <div className="mb-3">
                                                             <label htmlFor="account" className="form-label text-white">Tipo de cuenta<span className='text-danger'>*</span></label>
-                                                            <select className="form-select" id='account' value={bank.account} onChange={(e) => {
+                                                            <select className="form-select" id='account' defaultValue={bank.account} onChange={(e) => {
                                                                 let tempBank = bank;
                                                                 tempBank.account = e.target.value;
                                                                 setBank(tempBank);
@@ -228,7 +228,7 @@ const Profile = () => {
                                                     <div className="col-6">
                                                         <div className="mb-3">
                                                             <label htmlFor="accountNumber" className="form-label text-white">Número de cuenta<span className='text-danger'>*</span></label>
-                                                            <input type="password" defaultValue={bank.accountNumber} className="form-control" id="accountNumber" onChange={(e) => {
+                                                            <input type="text" defaultValue={bank.accountNumber} className="form-control" id="accountNumber" onChange={(e) => {
                                                                 let tempBank = bank;
                                                                 tempBank.accountNumber = e.target.value;
                                                                 setBank(tempBank)
