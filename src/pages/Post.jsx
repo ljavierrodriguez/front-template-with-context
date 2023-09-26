@@ -65,9 +65,9 @@ const Post = () => {
                                     <p>{store.loanAdvertisement.description}</p>
                                     <p className=''>Condiciones:</p>
                                     <ul>
-                                        <li>Un requerimiento</li>
-                                        <li>Otro requerimiento</li>
-                                        <li>Y requerimiento más</li>
+                                        <li>Monto del préstamo: {store.loanAdvertisement.amount}</li>
+                                        <li>Pago {store.loanAdvertisement.paymentFrequency.frequency == 'Weekly' ? 'semanal' : 'mensual'}</li>
+                                        <li>Intereses a pagar: {store.loanAdvertisement.interest} %</li>
                                     </ul>
                                 </div>
                             </div>
