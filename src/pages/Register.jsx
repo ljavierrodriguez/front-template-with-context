@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Context } from "../store/AppContext";
-import Navbar from '../components/Navbar';
+import Navbar from '../components/NavbarMobile';
 import DropzoneFileUploader from '../components/DropzoneFileUploader';
 import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -190,6 +190,7 @@ const Register = () => {
                                                 field.onChange(currentNumber);
                                                 setPhoneNumber("+" + countryData.dialCode + " " + currentNumber);
                                             }}
+
                                         />
                                     )}
                                 />

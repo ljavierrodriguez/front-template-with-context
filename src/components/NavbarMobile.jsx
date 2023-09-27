@@ -2,14 +2,14 @@ import React from 'react'
 import Icon from './Icon'
 import { useNavigate } from 'react-router-dom';
 
-const Navbar = ({ title, type, symbol }) => {
+const NavbarMobile = ({ title, type, symbol }) => {
 
     const navigate = useNavigate();
 
     
 
     return (
-        <nav className="navbar bg-dark w-100 text-center navColor" data-bs-theme="dark">
+        <nav className="navbar bg-dark w-100 text-center navColor pt-3" data-bs-theme="dark">
             <div className='col-1'>
                 <a className='text-white' onClick={() => navigate(-1)} style={{cursor: "pointer"}}><Icon type={type} symbol={symbol}/></a>
             </div>
@@ -23,4 +23,4 @@ const Navbar = ({ title, type, symbol }) => {
     )
 }
 
-export default Navbar
+export default NavbarMobile

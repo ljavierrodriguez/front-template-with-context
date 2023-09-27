@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState } from 'react';
 import Icon from '../components/Icon';
 import PublicationsCard from '../components/PublicationsCard';
-import Navbar from '../components/Navbar';
+import NavbarMobile from '../components/NavbarMobile';
 import NavbarVertical from '../components/NavbarVertical';
 import SearchBar from '../components/SearchBar';
 import TopBar from '../components/TopBar';
@@ -27,7 +27,7 @@ const Wall = () => {
 
         <div className='container-fluid'>
             <div className='d-md-none'>
-                <Navbar />
+                <NavbarMobile />
             </div>
 
             <div className='row d-md-none'>
@@ -48,10 +48,10 @@ const Wall = () => {
             </div>
             <TopBar />
             <div className="row">
-                <div className='d-none d-md-inline col-md-3 col-lg-3'>
+                <div className='d-none d-md-inline col-md-3 col-lg-2'>
                     <NavbarVertical />
                 </div>
-                <div className='col-10 offset-1 col-md-8 offset-md-0 offset-lg-1 col-lg-7 d-flex flex-column align-items-center'>
+                <div className='col-10 offset-1 col-md-8 offset-md-0 col-lg-9 ms-lg-5 me-lg-5 d-flex flex-column align-items-center overflow-auto vh-100'>
                     <SearchBar />
                     {
                         store.loanAdvertisements ?

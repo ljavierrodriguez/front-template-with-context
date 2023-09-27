@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/NavbarMobile';
 import TopBar from '../components/TopBar';
 import { Context } from "../store/AppContext";
 import { useForm } from "react-hook-form";

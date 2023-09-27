@@ -52,13 +52,30 @@ form {
     background-color: #0E1926;
     padding: 80px 0px 80px 30px;
 }
-.post_footer{
+
+.post_footer {
     background-color: #0E1926;
 }
-.home_inputs_div{
+
+.home_inputs_div {
     margin-top: -300px;
 }
-.navbarvertical{
+
+.navbarvertical {
     height: 100vh;
 }
 
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(200, 200, 200, 1);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #706f6f;
+    -webkit-box-shadow: inset 0 0 6px rgba(90, 90, 90, 0.7);
+}
