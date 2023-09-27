@@ -2,14 +2,16 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Context } from "../store/AppContext";
 import Navbar from '../components/Navbar';
 import Icon from '../components/Icon';
-import { get } from 'react-hook-form';
 import NavbarVertical from '../components/NavbarVertical';
 import TopBar from '../components/TopBar';
 import { useNavigate } from "react-router-dom";
+import { useForm, Controller } from "react-hook-form";
+import IntlTelInput from 'react-intl-tel-input';
 
 const Profile = () => {
     const navigate = useNavigate();
     const { store, actions } = useContext(Context);
+    const { register, handleSubmit: reactHookFormSubmit, formState: { errors }, control } = useForm({ mode: "onBlur", reValidateMode: 'onBlur' });
     const [profilePictureFile, setProfilePictureFile] = useState(null);
     const [profilePictureFileError, setProfilePictureFileError] = useState('');
     const [phoneNumber, setPhoneNumber] = useState(null);
@@ -47,13 +49,15 @@ const Profile = () => {
         }
     }
 
-    const openFormControl = (formControl, valueToSet) => {
+    const openCloseFormControl = (formControl, valueToSet) => {
         if (formControl === "phone") {
-            setPhoneNumber(valueToSet);
+            const numberTemp = phoneNumber ? null : valueToSet
+            setPhoneNumber(numberTemp);
         }
 
         else if (formControl === "bank") {
-            setBank(valueToSet);
+            const bankTemp = bank ? null : valueToSet
+            setBank(bankTemp);
         }
     }
 
@@ -72,7 +76,7 @@ const Profile = () => {
             }
         }
 
-        else if (formControl === "bank"){
+        else if (formControl === "bank") {
             // Create the final payload
             const payload = {
                 bankAccountNumber: valueToSet.accountNumber,
@@ -157,27 +161,66 @@ const Profile = () => {
                             <div>
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <p className='text-white m-0'>Teléfono</p>
-                                    <p className='text-white fs-5' onClick={() => openFormControl("phone", store.user.user.phoneNumber)} style={{ cursor: "pointer" }}>
+                                    <p className='text-white fs-5' onClick={() => openCloseFormControl("phone", store.user.user.phoneNumber)} style={{ cursor: "pointer" }}>
                                         <Icon type={'solid'} symbol={'pen-to-square'} />
                                     </p>
                                 </div>
                                 {phoneNumber ?
                                     <>
-                                        <div className="row">
-                                            <div className="col-6">
-                                                <input type="text" defaultValue={store.user.user.phoneNumber} className="form-control" id="phone" onChange={(e) => { setPhoneNumber(e.target.value) }} />
+                                        <form style={{ backgroundColor: "unset" }} onSubmit={reactHookFormSubmit(() => submitFormControl("phone", phoneNumber))}>
+                                            <div className="row">
+                                                <div className="col-6">
+                                                    <div className="mb-3">
+                                                        <Controller
+                                                            control={control}
+                                                            name="phone"
+                                                            rules={{
+                                                                required: "Ingrese su número telefónico",
+                                                                minLength: { value: 8, message: 'Su número de teléfono debe contener al menos 8 números' },
+                                                                maxLength: { value: 20, message: "Su número de teléfono no debe exceder los 20 números" },
+                                                                pattern: { value: /^\d+$/, message: "Tu número de teléfono debe tener solo números" }
+                                                            }}
+                                                            render={({ field }) => (
+                                                                <IntlTelInput
+                                                                    {...field}
+                                                                    ref={(ref) => {
+                                                                        if (ref && !ref.focus) ref.focus = () => { };
+                                                                    }}
+                                                                    error={!!errors.phone}
+                                                                    helperText={<>{errors?.phone?.message}</>}
+                                                                    containerClassName="intl-tel-input w-100"
+                                                                    preferredCountries={['cl', 'us']}
+                                                                    inputClassName="form-control bg-transparent text-light"
+                                                                    defaultValue = {store.user.user.phoneNumber.split(' ').slice(1).join(' ')}
+                                                                    onPhoneNumberBlur={() => {
+                                                                        field.onBlur();
+                                                                    }}
+                                                                    onPhoneNumberChange={(isValid, value, countryData, fullNumber) => {
+                                                                        field.onChange(fullNumber);
+                                                                        setPhoneNumber("+" + countryData.dialCode + " " + fullNumber);
+                                                                    }}
+                                                                    onSelectFlag={(currentNumber, countryData) => {
+                                                                        field.onChange(currentNumber);
+                                                                        setPhoneNumber("+" + countryData.dialCode + " " + currentNumber);
+                                                                    }}
+                                                                />
+                                                            )}
+                                                        />
+                                                        <p className='text-danger'>{errors.phone?.message}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="col-6">
+                                                    <button type="submit" className="btn btn-secondary btn-sm w-50 h-50" style={{ fontSize: "1.5vh" }}>Update Teléfono</button>
+                                                </div>
                                             </div>
-                                            <div className="col-6">
-                                                <button type="submit" className="btn btn-secondary btn-sm w-50 h-100" style={{fontSize: "1.5vh"}} onClick={() => submitFormControl("phone", phoneNumber)}>Update Teléfono</button>
-                                            </div>
-                                        </div>
+                                        </form>
                                     </>
                                     : <p className='text-secondary m-0'>{store.user.user.phoneNumber}</p>}
                             </div>
                             <div>
                                 <div className='d-flex justify-content-between align-items-center'>
                                     <p className='text-white m-0'>Datos bancarios</p>
-                                    <p className='text-white fs-5' onClick={() => openFormControl("bank", { bank: store.user.user.bankDetails.bank.bankID, account: store.user.user.bankDetails.accountType.accountTypeID, accountNumber: store.user.user.bankDetails.bankAccountNumber })} style={{ cursor: "pointer" }}>
+                                    <p className='text-white fs-5' onClick={() => openCloseFormControl("bank", { bank: store.user.user.bankDetails.bank.bankID, account: store.user.user.bankDetails.accountType.accountTypeID, accountNumber: store.user.user.bankDetails.bankAccountNumber })} style={{ cursor: "pointer" }}>
                                         <Icon type={'solid'} symbol={'pen-to-square'} />
                                     </p>
                                 </div>
@@ -221,7 +264,7 @@ const Profile = () => {
                                                         </div>
                                                     </div>
                                                     <div className="col-6 d-flex align-items-center">
-                                                        <button type="submit" className="btn btn-secondary btn-sm w-50 h-50" style={{fontSize: "1.5vh"}} onClick={() => submitFormControl("bank", bank)}>Update Banco</button>
+                                                        <button type="submit" className="btn btn-secondary btn-sm w-50 h-50" style={{ fontSize: "1.5vh" }} onClick={() => submitFormControl("bank", bank)}>Update Banco</button>
                                                     </div>
                                                 </div>
                                                 <div className="row">

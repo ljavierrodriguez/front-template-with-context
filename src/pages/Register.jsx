@@ -1,15 +1,17 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { Context } from "../store/AppContext";
 import Navbar from '../components/Navbar';
 import DropzoneFileUploader from '../components/DropzoneFileUploader';
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import "../css/backgroundAnimation.css"
+import IntlTelInput from 'react-intl-tel-input';
+import 'react-intl-tel-input/dist/main.css';
 
 const Register = () => {
     const { store, actions } = useContext(Context);
     const navigate = useNavigate();
-    const { register, handleSubmit: reactHookFormSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit: reactHookFormSubmit, formState: { errors }, control } = useForm({ mode: "onBlur", reValidateMode: 'onBlur' });
     const [firstName, setFirstName] = useState('');
     const [lastName, setlastName] = useState('');
     const [username, setUsername] = useState('');
@@ -113,13 +115,13 @@ const Register = () => {
 
     return (
         <>
-            <div class='box' style={{zIndex: "-1"}}>
-                <div class='wave -one'></div>
-                <div class='wave -two'></div>
-                <div class='wave -three'></div>
+            <div className='box' style={{ zIndex: "-1" }}>
+                <div className='wave -one'></div>
+                <div className='wave -two'></div>
+                <div className='wave -three'></div>
             </div>
 
-            <div style={{zIndex:"1"}}>
+            <div style={{ zIndex: "1" }}>
                 <Navbar title={"Registro"} type={'solid'} symbol={'arrow-left'} />
 
                 <div className='row p-3'>
@@ -130,34 +132,77 @@ const Register = () => {
                         <form className='p-3 rounded col-10 col-md-12 mt-3' onSubmit={reactHookFormSubmit(handleFormSubmit)}>
                             <div className="mb-3">
                                 <label htmlFor="firstName" className="form-label text-white">Primer Nombre<span className='text-danger'>*</span></label>
-                                <input type="text" {...register("firstName", { required: 'Su nombre es requerido' })} className="form-control bg-transparent text-light" id="firstName" onChange={(e) => { setFirstName(e.target.value) }} />
+                                <input type="text" {...register("firstName", { required: 'Su nombre es requerido', maxLength: { value: 50, message: "Su nombre supera el máximo de 50 caracteres" } })} className="form-control bg-transparent text-light" id="firstName" onChange={(e) => { setFirstName(e.target.value) }} />
                                 <p className='text-danger'>{errors.firstName?.message}</p>
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="lastName" className="form-label text-white">Apellidos<span className='text-danger'>*</span></label>
-                                <input type="text" {...register("lastName", { required: 'Su nombre es requerido' })} className="form-control bg-transparent text-light" id="lastName" onChange={(e) => { setlastName(e.target.value) }} />
+                                <input type="text" {...register("lastName", { required: 'Su nombre es requerido', maxLength: { value: 50, message: "Su apellido supera el máximo de 50 caracteres" } })} className="form-control bg-transparent text-light" id="lastName" onChange={(e) => { setlastName(e.target.value) }} />
                                 <p className='text-danger'>{errors.lastName?.message}</p>
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="username" className="form-label text-white">Nombre de usuario<span className='text-danger'>*</span></label>
-                                <input type="text" {...register("username", { required: 'Debe ingresar un nombre de usuario' })} className="form-control bg-transparent text-light" id="username" onChange={(e) => { setUsername(e.target.value) }} />
+                                <input type="text" {...register("username", { required: 'Debe ingresar un nombre de usuario', maxLength: { value: 100, message: "Su nombre de usuario supera el máximo de 100 caracteres" } })} className="form-control bg-transparent text-light" id="username" onChange={(e) => { setUsername(e.target.value) }} />
                                 <p className='text-danger'>{errors.username?.message}</p>
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="email" className="form-label text-white">Correo electrónico<span className='text-danger'>*</span></label>
-                                <input type="text" {...register("email", { required: 'Debe ingresar su correo electrónico' })} className="form-control bg-transparent text-light" id="email" onChange={(e) => { setEmail(e.target.value) }} />
+                                <input type="text" {...register("email", { required: 'Debe ingresar su correo electrónico', maxLength: { value: 100, message: "Su dirección de correo electrónico supera el máximo de 100 caracteres" }, pattern: { value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, message: 'El correo electrónico debe ser una dirección de correo electrónico válida.' } })} className="form-control bg-transparent text-light" id="email" onChange={(e) => { setEmail(e.target.value) }} />
                                 <p className='text-danger'>{errors.email?.message}</p>
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="password" className="form-label text-white">Contraseña<span className='text-danger'>*</span></label>
-                                <input type="password" {...register("password", { required: 'Debe ingresar una contraseña', minLength: { value: 6, message: 'La contraseña debe contener al menos 6 caracteres' } })} className="form-control bg-transparent text-light" id="email" onChange={(e) => { setPassword(e.target.value) }} />
+                                <input type="password" {...register("password", { required: 'Debe ingresar una contraseña', minLength: { value: 6, message: 'La contraseña debe contener al menos 6 caracteres' }, maxLength: { value: 120, message: "Su contraseña supera el máximo de 120 caracteres" }, pattern: { value: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, message: 'Tu contraseña debe tener un mínimo de ocho caracteres, al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.' } })} className="form-control bg-transparent text-light" id="password" onChange={(e) => { setPassword(e.target.value) }} />
                                 <p className='text-danger'>{errors.password?.message}</p>
                             </div>
                             <div className="mb-3">
-                                <label htmlFor="phone" className="form-label text-white">Teléfono<span className='text-danger'>*</span></label>
-                                <input type="text" {...register("phone", { required: 'Ingrese su número telefónico' })} className="form-control bg-transparent text-light" id="phone" onChange={(e) => { setPhoneNumber(e.target.value) }} />
+                                <label htmlFor="phone" className="form-label text-white">
+                                    Teléfono<span className='text-danger'>*</span>
+                                </label>
+                                <Controller
+                                    control={control}
+                                    name="phone"
+                                    rules={{
+                                        required: "Ingrese su número telefónico",
+                                        minLength: { value: 8, message: 'Su número de teléfono debe contener al menos 8 números' },
+                                        maxLength: { value: 20, message: "Su número de teléfono no debe exceder los 20 números" },
+                                        pattern: { value: /^\d+$/, message: "Tu número de teléfono debe tener solo números" }
+                                    }}
+                                    render={({ field }) => (
+                                        <IntlTelInput
+                                            {...field}
+                                            ref={(ref) => {
+                                                if (ref && !ref.focus) ref.focus = () => { };
+                                            }}
+                                            error={!!errors.phone}
+                                            helperText={<>{errors?.phone?.message}</>}
+                                            containerClassName="intl-tel-input w-100"
+                                            preferredCountries={['cl', 'us']}
+                                            inputClassName="form-control bg-transparent text-light"
+                                            onPhoneNumberBlur={() => {
+                                                field.onBlur();
+                                            }}
+                                            onPhoneNumberChange={(isValid, value, countryData, fullNumber) => {
+                                                field.onChange(fullNumber);
+                                                setPhoneNumber("+" + countryData.dialCode + " " + fullNumber);
+                                            }}
+                                            onSelectFlag={(currentNumber, countryData) => {
+                                                field.onChange(currentNumber);
+                                                setPhoneNumber("+" + countryData.dialCode + " " + currentNumber);
+                                            }}
+                                        />
+                                    )}
+                                />
                                 <p className='text-danger'>{errors.phone?.message}</p>
                             </div>
+                            {/* <div className="mb-3">
+                                <label htmlFor="phone" className="form-label text-white">Teléfono<span className='text-danger'>*</span></label>
+                                <IntlTelInput containerClassName="intl-tel-input w-100" inputClassName="form-control bg-transparent text-light" />
+                                <input type="tel" {...register("phone", { required: 'Ingrese su número telefónico', minLength: { value: 8, message: 'Su número de teléfono debe contener al menos 8 números'}, 
+                                maxLength: { value: 20, message: "Su número de teléfono no debe exceder los 20 números"}, 
+                                pattern: {value: /^\d+$/, message: "Tu número de teléfono debe tener solo números" }})} className="form-control bg-transparent text-light" id="phone" onChange={(e) => { setPhoneNumber(e.target.value) }} />
+                                <p className='text-danger'>{errors.phone?.message}</p>
+                            </div> */}
                             <div className="mb-3">
                                 <label htmlFor="bank" className="form-label text-white">Banco<span className='text-danger'>*</span></label>
                                 <select className="form-select bg-transparent text-light" {...register("bank", { required: 'Seleccione un banco' })} id='bank' value={bank} onChange={(e) => { setBank(e.target.value) }}>
@@ -184,7 +229,7 @@ const Register = () => {
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="accountNumber" className="form-label text-white">Número de cuenta<span className='text-danger'>*</span></label>
-                                <input type="text" {...register("accountNumber", { required: 'Ingrese su número de cuenta' })} className="form-control bg-transparent text-light" id="accountNumber" onChange={(e) => { setAccountNumber(e.target.value) }} />
+                                <input type="text" {...register("accountNumber", { required: 'Ingrese su número de cuenta', minLength: { value: 8, message: 'Su número de cuenta debe tener 8 dígitos' }, maxLength: { value: 8, message: 'Su número de cuenta debe tener 8 dígitos' } })} className="form-control bg-transparent text-light" id="accountNumber" onChange={(e) => { setAccountNumber(e.target.value) }} />
                                 <p className='text-danger'>{errors.accountNumber?.message}</p>
                             </div>
 
