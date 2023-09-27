@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import Navbar from '../components/Navbar'
+import NavbarMobile from '../components/NavbarMobile'
 import { Context } from "../store/AppContext";
 import { Link, useParams } from 'react-router-dom';
 import PostsCard from '../components/PostsCard';
@@ -28,7 +28,7 @@ const Post = () => {
 
     return (
         <>
-            <Navbar />
+            <NavbarMobile />
             {store.loanAdvertisement ?
                 <>
                     <div className='d-flex flex-column justify-content-center align-items-center postWrapper mt-2'>
@@ -40,7 +40,7 @@ const Post = () => {
                         </div>
                         <div className='text-center mt-2 pb-3 border-bottom border-secondary col-10'>
                             <p className='text-white fw-bold m-0'>{store.loanAdvertisement.lender.user.firstName} {store.loanAdvertisement.lender.user.lastName}</p>
-                            <p className='text-secondary m-0'>{store.loanAdvertisement.lender.user.username}</p>
+                            <p className='text-secondary'>{store.loanAdvertisement.lender.user.username}</p>
                             <div className='text-center'>
                                 <span className='post_details_spn text-primary rounded'>6 transacciones</span> <span className='post_details_spn text-primary rounded'>Negociable: {store.loanAdvertisement.negotiable.toString()}</span>
                             </div>

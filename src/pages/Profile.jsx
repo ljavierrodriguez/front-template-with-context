@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Context } from "../store/AppContext";
-import Navbar from '../components/Navbar';
+import Navbar from '../components/NavbarMobile';
 import Icon from '../components/Icon';
 import NavbarVertical from '../components/NavbarVertical';
 import TopBar from '../components/TopBar';

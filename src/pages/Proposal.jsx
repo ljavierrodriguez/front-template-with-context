@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import Navbar from '../components/Navbar';
+import Navbar from '../components/NavbarMobile';
 import { useForm } from "react-hook-form";
 import { Context } from "../store/AppContext";
 import { useParams, useNavigate } from 'react-router-dom';

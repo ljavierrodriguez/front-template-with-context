@@ -1,4 +1,4 @@
-import Navbar from '../components/Navbar';
+import Navbar from '../components/NavbarMobile';
 import PublicationsCard from '../components/PublicationsCard';
 import Icon from '../components/Icon';
 import NavbarVertical from '../components/NavbarVertical';
