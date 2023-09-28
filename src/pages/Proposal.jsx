@@ -37,7 +37,7 @@ const Proposal = () => {
             <Navbar title={'Propuesta'} />
 
             <div className="container">
-                <form className='rounded p-5' onSubmit={reactHookFormSubmit(handlePostPropsal)}>
+                <form className='rounded p-5' style={{backgroundColor: "unset"}} onSubmit={reactHookFormSubmit(handlePostPropsal)}>
                     <div className="row">
                         <div className="col-md-6">
                             <div className="mb-3">

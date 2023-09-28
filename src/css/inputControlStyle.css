@@ -10,3 +10,11 @@
 .form-control::-ms-input-placeholder { /* Microsoft Edge */
     color: white;
 }
+
+.form-control{
+    border-color: grey;
+}
+
+.form-select {
+    border-color: grey; 
+}
